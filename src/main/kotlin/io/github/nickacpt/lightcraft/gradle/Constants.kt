@@ -2,6 +2,8 @@ package io.github.nickacpt.lightcraft.gradle
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.objectweb.asm.Opcodes
+
 
 const val FABRICMC_LIBRARIES_BASE = "https://maven.fabricmc.net/"
 const val LIBRARIES_BASE = "https://libraries.minecraft.net/"
@@ -13,5 +15,9 @@ const val MAPPING_DEST_NS = "named"
 
 const val JAR_MOD_CONFIGURATION = "minecraftJarMod"
 const val MINECRAFT_LIBRARY_CONFIGURATION = "minecraftLibrary"
+
+const val ASM_VERSION = Opcodes.ASM9
+
+const val TASK_GROUP = "lightcraft"
 
 val objectMapper by lazy { jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }

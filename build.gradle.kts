@@ -33,6 +33,21 @@ dependencies {
 
     /* Zip I/O */
     implementation("org.zeroturnaround:zt-zip:1.14")
+
+    /* Decompilers */
+    implementation("net.fabricmc:fabric-fernflower:1.4.1")
+
+    /* ASM */
+    implementation("org.ow2.asm:asm:9.2")
+    implementation("org.ow2.asm:asm-analysis:9.2")
+    implementation("org.ow2.asm:asm-commons:9.2")
+    implementation("org.ow2.asm:asm-tree:9.2")
+    implementation("org.ow2.asm:asm-util:9.2")
+
+    /* Remapping helper - Decompilation */
+    implementation("net.fabricmc:stitch:0.6.1") {
+        exclude(module = "enigma")
+    }
 }
 
 gradlePlugin {

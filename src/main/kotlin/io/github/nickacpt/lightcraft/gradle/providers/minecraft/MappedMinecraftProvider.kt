@@ -14,7 +14,7 @@ import net.fabricmc.mappingpoet.Main as MappingPoetMain
 
 object MappedMinecraftProvider {
     @OptIn(ExperimentalPathApi::class)
-    fun provideMappedMinecraft(project: Project) {
+    fun provideMappedMinecraftDependency(project: Project): File {
         val extension = project.lightCraftExtension
 
         val finalDependencyFile = project.provideDependency(
@@ -24,12 +24,16 @@ object MappedMinecraftProvider {
             file = provideMappedMinecraftFile(project)
         )
 
+/*
         provideMinecraftJavadoc(
             project, File(
                 finalDependencyFile.parent,
                 "${finalDependencyFile.nameWithoutExtension}-javadoc.jar"
             )
         )
+*/
+
+        return finalDependencyFile
     }
 
     @ExperimentalPathApi
@@ -55,7 +59,7 @@ object MappedMinecraftProvider {
     }
 
 
-    fun provideMappedMinecraftFile(project: Project): File {
+    private fun provideMappedMinecraftFile(project: Project): File {
         val unmappedMinecraftJar = MinecraftJarModsProvider.provideJarModdedMinecraftJar(project)
         val finalMappingsFile = MinecraftMappingsProvider.provideMappings(project)
 

@@ -3,6 +3,7 @@ package io.github.nickacpt.lightcraft.gradle
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftJarModsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftLibraryProvider
+import io.github.nickacpt.lightcraft.gradle.tasks.LightCraftGradleTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.add
@@ -26,12 +27,13 @@ class LightCraftGradlePlugin : Plugin<Project> {
             if (extension.provideOptifineJarMod) {
                 MinecraftJarModsProvider.provideOptifineJarMod(project)
             }
-
             // Provide mapped Minecraft jar
-            MappedMinecraftProvider.provideMappedMinecraft(project)
+            MappedMinecraftProvider.provideMappedMinecraftDependency(project)
 
             // Provide Minecraft libraries
             MinecraftLibraryProvider.provideMinecraftLibraries(project)
+
+            LightCraftGradleTasks.setupTasks(project)
         }
     }
 }
