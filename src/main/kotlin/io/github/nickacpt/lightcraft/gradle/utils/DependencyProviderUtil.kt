@@ -1,11 +1,18 @@
 package io.github.nickacpt.lightcraft.gradle.utils
+
 import io.github.nickacpt.lightcraft.gradle.getCachedFile
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.create
 import java.io.File
 
-fun Project.provideDependency(group: String, name: String, version: String, configuration: String = JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, file: File): File {
+fun Project.provideDependency(
+    group: String,
+    name: String,
+    version: String,
+    configuration: String = JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME,
+    file: File
+): File {
     val providedDependency = project.dependencies.create(
         group,
         name,
