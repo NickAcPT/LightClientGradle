@@ -1,6 +1,7 @@
 package io.github.nickacpt.lightcraft.gradle
 
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.zeroturnaround.zip.ZipUtil
 import java.io.File
 
@@ -58,6 +59,9 @@ fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit) {
         }
     }
 }
+
+val Project.finalJarTask: Task
+    get() = kotlin.runCatching { tasks.getByName("shadowJar") }.getOrNull() ?: tasks.getByName("jar")
 
 fun removeSignature(jarFile: File) {
     ZipUtil.removeEntry(jarFile, "META-INF/MANIFEST.MF")

@@ -10,7 +10,7 @@ import java.net.URL
 
 object MinecraftJarModsProvider {
 
-    const val jarModsFolder = "jarMods"
+    private const val jarModsFolder = "jarMods"
 
     private fun provideOptifineJarUrl(version: ClientVersion): String {
         return when (version) {
@@ -49,7 +49,6 @@ object MinecraftJarModsProvider {
             }
 
             removeSignature(finalMergedJar)
-
         }
     }
 

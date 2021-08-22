@@ -32,7 +32,7 @@ import org.gradle.api.tasks.Internal;
 
 public abstract class AbstractLightCraftGradleTask extends DefaultTask {
     public AbstractLightCraftGradleTask() {
-        setGroup(ConstantsKt.TASK_GROUP);
+        setGroup(ConstantsKt.LIGHTCRAFT_TASK_GROUP);
     }
 
     @Internal

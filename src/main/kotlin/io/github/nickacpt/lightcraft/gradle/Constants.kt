@@ -20,6 +20,16 @@ const val MINECRAFT_LIBRARY_CONFIGURATION = "minecraftLibrary"
 
 const val ASM_VERSION = Opcodes.ASM9
 
-const val TASK_GROUP = "lightcraft"
+const val LIGHTCRAFT_TASK_GROUP = "lightcraft"
+
+const val LAUNCHWRAPPER_MAIN_CLASS = "lightcraft.launch.main"
+const val LAUNCHWRAPPER_MIXIN_SIDE_PROP = "lightcraft.launch.mixin.side"
+
+const val MIXIN_SIDE_DEDICATEDSERVER = "DEDICATEDSERVER"
+const val MIXIN_SIDE_SERVER = "SERVER"
+const val MIXIN_SIDE_CLIENT = "CLIENT"
+const val MIXIN_SIDE_UNKNOWN = "UNKNOWN"
+
+const val LIGHTCRAFT_LAUNCH_PLAYER_NAME = "LightCraftDev"
 
 val objectMapper by lazy { jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }

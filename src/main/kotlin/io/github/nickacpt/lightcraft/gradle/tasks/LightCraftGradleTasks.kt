@@ -1,6 +1,7 @@
 package io.github.nickacpt.lightcraft.gradle.tasks
 
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
+import io.github.nickacpt.lightcraft.gradle.tasks.impl.RunClientTask
 import net.fabricmc.loom.decompilers.fernflower.FabricFernFlowerDecompiler
 import net.fabricmc.loom.tasks.GenerateSourcesTask
 import org.gradle.api.Project
@@ -11,5 +12,6 @@ object LightCraftGradleTasks {
             .apply {
                 inputJar = MappedMinecraftProvider.provideMappedMinecraftDependency(project)
             }
+        project.tasks.register("runClient", RunClientTask::class.java)
     }
 }

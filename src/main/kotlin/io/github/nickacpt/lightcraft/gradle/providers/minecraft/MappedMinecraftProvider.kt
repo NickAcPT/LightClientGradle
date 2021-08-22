@@ -14,14 +14,12 @@ object MappedMinecraftProvider {
     fun provideMappedMinecraftDependency(project: Project): File {
         val extension = project.lightCraftExtension
 
-        val finalDependencyFile = project.provideDependency(
+        return project.provideDependency(
             "net.minecraft",
             "minecraft",
             extension.clientVersion.friendlyName,
             file = provideMappedMinecraftFile(project)
         )
-
-        return finalDependencyFile
     }
 
     private fun provideMappedMinecraftFile(project: Project): File {
