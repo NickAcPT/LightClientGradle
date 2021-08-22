@@ -6,11 +6,8 @@ import io.github.nickacpt.lightcraft.gradle.utils.RemapMappingFile
 import io.github.nickacpt.lightcraft.gradle.utils.provideDependency
 import io.github.nickacpt.lightcraft.gradle.utils.remapJar
 import org.gradle.api.Project
-import org.zeroturnaround.zip.ZipUtil
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.createTempDirectory
-import net.fabricmc.mappingpoet.Main as MappingPoetMain
 
 object MappedMinecraftProvider {
     @OptIn(ExperimentalPathApi::class)
@@ -24,40 +21,8 @@ object MappedMinecraftProvider {
             file = provideMappedMinecraftFile(project)
         )
 
-/*
-        provideMinecraftJavadoc(
-            project, File(
-                finalDependencyFile.parent,
-                "${finalDependencyFile.nameWithoutExtension}-javadoc.jar"
-            )
-        )
-*/
-
         return finalDependencyFile
     }
-
-    @ExperimentalPathApi
-    fun provideMinecraftJavadoc(project: Project, javadocFile: File) {
-        project.getCachedFile(javadocFile) {
-            val tempLibrariesDir = createTempDirectory()
-            val javadocOutputDir = createTempDirectory()
-
-            val mappingsFile = MinecraftMappingsProvider.provideMappings(project)
-            val mappedMinecraftFile = provideMappedMinecraftFile(project)
-            MappingPoetMain.generate(
-                mappingsFile.toPath(),
-                mappedMinecraftFile.toPath(),
-                javadocOutputDir,
-                tempLibrariesDir
-            )
-
-            ZipUtil.pack(javadocOutputDir.toFile(), javadocFile)
-
-            tempLibrariesDir.toFile().deleteRecursively()
-            javadocOutputDir.toFile().deleteRecursively()
-        }
-    }
-
 
     private fun provideMappedMinecraftFile(project: Project): File {
         val unmappedMinecraftJar = MinecraftJarModsProvider.provideJarModdedMinecraftJar(project)

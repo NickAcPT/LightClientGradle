@@ -13,6 +13,7 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io/")
     maven("https://maven.fabricmc.net/")
+    maven("https://maven.quiltmc.org/repository/release/")
 }
 
 dependencies {
@@ -26,16 +27,13 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.4")
 
     /* Jar Remapping */
-    implementation("net.fabricmc:tiny-remapper:0.5.0")
-
-    /* Jar Javadoc generation */
-    implementation("net.fabricmc:mappingpoet:0.2.8")
+    implementation("org.quiltmc:tiny-remapper:0.4.3")
 
     /* Zip I/O */
     implementation("org.zeroturnaround:zt-zip:1.14")
 
-    /* Decompilers */
-    implementation("net.fabricmc:fabric-fernflower:1.4.1")
+    /* Decompiler */
+    implementation("org.quiltmc:quiltflower:1.5.0")
 
     /* ASM */
     implementation("org.ow2.asm:asm:9.2")
@@ -45,7 +43,7 @@ dependencies {
     implementation("org.ow2.asm:asm-util:9.2")
 
     /* Remapping helper - Decompilation */
-    implementation("net.fabricmc:stitch:0.6.1") {
+    implementation("org.quiltmc:stitch:0.6.2") {
         exclude(module = "enigma")
     }
 }
