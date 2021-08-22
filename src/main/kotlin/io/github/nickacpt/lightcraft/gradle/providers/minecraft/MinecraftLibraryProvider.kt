@@ -13,6 +13,7 @@ object MinecraftLibraryProvider {
     private const val asmVersion = "9.1"
     const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
     const val asmDependency = "org.ow2.asm:asm:$asmVersion"
+    const val asmTreeDependency = "org.ow2.asm:asm-tree:$asmVersion"
     const val asmUtilDependency = "org.ow2.asm:asm-util:$asmVersion"
 
     fun provideMinecraftLibraries(project: Project) {
@@ -34,7 +35,7 @@ object MinecraftLibraryProvider {
         }
 
         // Provide a few updated dependencies
-        arrayOf(mixinDependency, asmDependency, "javax.annotation:javax.annotation-api:1.3.2").forEach {
+        arrayOf(mixinDependency, asmDependency, asmTreeDependency, asmUtilDependency, "javax.annotation:javax.annotation-api:1.3.2").forEach {
             project.dependencies.add(
                 MINECRAFT_LIBRARY_CONFIGURATION,
                 it
