@@ -47,7 +47,7 @@ import net.fabricmc.loom.decompilers.LineNumberRemapper;
 import net.fabricmc.loom.util.gradle.ProgressLogger;
 import net.fabricmc.stitch.util.StitchUtil;
 
-public class GenerateSourcesTask extends AbstractLoomTask {
+ public class GenerateSourcesTask extends AbstractLightCraftGradleTask {
 	public final LoomDecompiler decompiler;
 
 	private File inputJar;

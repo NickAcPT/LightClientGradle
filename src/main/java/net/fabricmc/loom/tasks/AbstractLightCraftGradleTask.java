@@ -30,8 +30,8 @@ import io.github.nickacpt.lightcraft.gradle.LightCraftGradleExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Internal;
 
-public abstract class AbstractLoomTask extends DefaultTask {
-    public AbstractLoomTask() {
+public abstract class AbstractLightCraftGradleTask extends DefaultTask {
+    public AbstractLightCraftGradleTask() {
         setGroup(ConstantsKt.TASK_GROUP);
     }
 
