@@ -63,7 +63,7 @@ public class TinyJavadocProvider implements IFabricJavadocProvider {
 		}
 
 		if (!isRecord(structClass)) {
-			return classDef.getComment();
+			return getClassDoc(classDef);
 		}
 
 		/**
@@ -110,6 +110,24 @@ public class TinyJavadocProvider implements IFabricJavadocProvider {
 		}
 
 		return String.join("\n", parts);
+	}
+
+	private String getClassDoc(MappingTree.ClassMapping classDef) {
+		ArrayList<String> javaDocParts = new ArrayList<>();
+		String originalComment = classDef.getComment();
+		if (originalComment != null) {
+			javaDocParts.add(originalComment);
+		}
+		MappingTree tree = classDef.getTree();
+
+		javaDocParts.add("");
+
+		for (String dstNamespace : tree.getDstNamespaces()) {
+			javaDocParts.add("@mapping %s %s".formatted(dstNamespace, classDef.getDstName(tree.getNamespaceId(dstNamespace))));
+		}
+
+		return String.join("\n", javaDocParts);
+
 	}
 
 	@Override
