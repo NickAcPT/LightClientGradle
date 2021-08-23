@@ -23,7 +23,7 @@ class LightCraftGradlePlugin : Plugin<Project> {
 
             // Setup Gradle configuration dependencies
             LightCraftConfigurations.setupConfigurationDeps(project)
-            
+
             // Provide Optifine as JarMod if requested
             if (extension.provideOptifineJarMod) {
                 MinecraftJarModsProvider.provideOptifineJarMod(project)

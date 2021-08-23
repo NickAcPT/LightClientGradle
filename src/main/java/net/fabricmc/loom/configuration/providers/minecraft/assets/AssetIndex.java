@@ -31,12 +31,13 @@ import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public record AssetIndex(@JsonProperty("map_to_resources") Boolean isMapToResources, Map<String, AssetObject> objects, Map<String, AssetObject> fileMap, boolean virtual) {
-	public AssetIndex() {
-		this(false, new LinkedHashMap<>(), new LinkedHashMap<>(), false);
-	}
+public record AssetIndex(@JsonProperty("map_to_resources") Boolean isMapToResources, Map<String, AssetObject> objects,
+                         Map<String, AssetObject> fileMap, boolean virtual) {
+    public AssetIndex() {
+        this(false, new LinkedHashMap<>(), new LinkedHashMap<>(), false);
+    }
 
-	public Set<AssetObject> getUniqueObjects() {
-		return new HashSet<>(this.objects.values());
-	}
+    public Set<AssetObject> getUniqueObjects() {
+        return new HashSet<>(this.objects.values());
+    }
 }

@@ -25,36 +25,36 @@
 package net.fabricmc.loom.util;
 
 public class OperatingSystem {
-	public static String getOS() {
-		String osName = System.getProperty("os.name").toLowerCase();
+    public static String getOS() {
+        String osName = System.getProperty("os.name").toLowerCase();
 
-		if (osName.contains("win")) {
-			return "windows";
-		} else if (osName.contains("mac")) {
-			return "osx";
-		} else {
-			return "linux";
-		}
-	}
+        if (osName.contains("win")) {
+            return "windows";
+        } else if (osName.contains("mac")) {
+            return "osx";
+        } else {
+            return "linux";
+        }
+    }
 
-	public static String getArch() {
-		if (is64Bit()) {
-			return "64";
-		} else {
-			return "32";
-		}
-	}
+    public static String getArch() {
+        if (is64Bit()) {
+            return "64";
+        } else {
+            return "32";
+        }
+    }
 
-	public static boolean is64Bit() {
-		return System.getProperty("sun.arch.data.model").contains("64");
-	}
+    public static boolean is64Bit() {
+        return System.getProperty("sun.arch.data.model").contains("64");
+    }
 
-	public static boolean isWindows() {
-		return getOS().equals("windows");
-	}
+    public static boolean isWindows() {
+        return getOS().equals("windows");
+    }
 
-	public static boolean isCIBuild() {
-		// CI seems to be set by most popular CI services
-		return System.getenv("CI") != null;
-	}
+    public static boolean isCIBuild() {
+        // CI seems to be set by most popular CI services
+        return System.getenv("CI") != null;
+    }
 }

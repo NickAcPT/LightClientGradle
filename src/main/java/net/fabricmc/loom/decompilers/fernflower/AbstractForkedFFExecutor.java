@@ -42,66 +42,66 @@ import java.util.Objects;
  * </p>
  */
 public abstract class AbstractForkedFFExecutor {
-	public static void decompile(String[] args, AbstractForkedFFExecutor ffExecutor) {
-		Map<String, Object> options = new HashMap<>();
-		File input = null;
-		File output = null;
-		File lineMap = null;
-		File mappings = null;
-		List<File> libraries = new ArrayList<>();
+    public static void decompile(String[] args, AbstractForkedFFExecutor ffExecutor) {
+        Map<String, Object> options = new HashMap<>();
+        File input = null;
+        File output = null;
+        File lineMap = null;
+        File mappings = null;
+        List<File> libraries = new ArrayList<>();
 
-		boolean isOption = true;
+        boolean isOption = true;
 
-		for (String arg : args) {
-			if (isOption && arg.length() > 5 && arg.charAt(0) == '-' && arg.charAt(4) == '=') {
-				String value = arg.substring(5);
+        for (String arg : args) {
+            if (isOption && arg.length() > 5 && arg.charAt(0) == '-' && arg.charAt(4) == '=') {
+                String value = arg.substring(5);
 
-				if ("true".equalsIgnoreCase(value)) {
-					value = "1";
-				} else if ("false".equalsIgnoreCase(value)) {
-					value = "0";
-				}
+                if ("true".equalsIgnoreCase(value)) {
+                    value = "1";
+                } else if ("false".equalsIgnoreCase(value)) {
+                    value = "0";
+                }
 
-				options.put(arg.substring(1, 4), value);
-			} else {
-				isOption = false;
+                options.put(arg.substring(1, 4), value);
+            } else {
+                isOption = false;
 
-				if (arg.startsWith("-e=")) {
-					libraries.add(new File(arg.substring(3)));
-				} else if (arg.startsWith("-o=")) {
-					if (output != null) {
-						throw new RuntimeException("Unable to set more than one output.");
-					}
+                if (arg.startsWith("-e=")) {
+                    libraries.add(new File(arg.substring(3)));
+                } else if (arg.startsWith("-o=")) {
+                    if (output != null) {
+                        throw new RuntimeException("Unable to set more than one output.");
+                    }
 
-					output = new File(arg.substring(3));
-				} else if (arg.startsWith("-l=")) {
-					if (lineMap != null) {
-						throw new RuntimeException("Unable to set more than one lineMap file.");
-					}
+                    output = new File(arg.substring(3));
+                } else if (arg.startsWith("-l=")) {
+                    if (lineMap != null) {
+                        throw new RuntimeException("Unable to set more than one lineMap file.");
+                    }
 
-					lineMap = new File(arg.substring(3));
-				} else if (arg.startsWith("-m=")) {
-					if (mappings != null) {
-						throw new RuntimeException("Unable to use more than one mappings file.");
-					}
+                    lineMap = new File(arg.substring(3));
+                } else if (arg.startsWith("-m=")) {
+                    if (mappings != null) {
+                        throw new RuntimeException("Unable to use more than one mappings file.");
+                    }
 
-					mappings = new File(arg.substring(3));
-				} else {
-					if (input != null) {
-						throw new RuntimeException("Unable to set more than one input.");
-					}
+                    mappings = new File(arg.substring(3));
+                } else {
+                    if (input != null) {
+                        throw new RuntimeException("Unable to set more than one input.");
+                    }
 
-					input = new File(arg);
-				}
-			}
-		}
+                    input = new File(arg);
+                }
+            }
+        }
 
-		Objects.requireNonNull(input, "Input not set.");
-		Objects.requireNonNull(output, "Output not set.");
-		Objects.requireNonNull(mappings, "Mappings not set.");
+        Objects.requireNonNull(input, "Input not set.");
+        Objects.requireNonNull(output, "Output not set.");
+        Objects.requireNonNull(mappings, "Mappings not set.");
 
-		ffExecutor.runFF(options, libraries, input, output, lineMap, mappings);
-	}
+        ffExecutor.runFF(options, libraries, input, output, lineMap, mappings);
+    }
 
-	public abstract void runFF(Map<String, Object> options, List<File> libraries, File input, File output, File lineMap, File mappings);
+    public abstract void runFF(Map<String, Object> options, List<File> libraries, File input, File output, File lineMap, File mappings);
 }

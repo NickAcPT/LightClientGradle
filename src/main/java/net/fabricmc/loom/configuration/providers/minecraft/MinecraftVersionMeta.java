@@ -45,7 +45,7 @@ public record MinecraftVersionMeta(
         String releaseTime,
         String time,
         String type
-        ) {
+) {
     public Download download(String key) {
         return downloads().get(key);
     }

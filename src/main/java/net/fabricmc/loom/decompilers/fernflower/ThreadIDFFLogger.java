@@ -27,7 +27,6 @@ package net.fabricmc.loom.decompilers.fernflower;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.Stack;
-
 import org.jetbrains.java.decompiler.main.extern.IFernflowerLogger;
 
 /**
@@ -37,91 +36,91 @@ import org.jetbrains.java.decompiler.main.extern.IFernflowerLogger;
  * <p>Created by covers1624 on 11/02/19.
  */
 public class ThreadIDFFLogger extends IFernflowerLogger {
-	public final PrintStream stdOut;
-	public final PrintStream stdErr;
+    public final PrintStream stdOut;
+    public final PrintStream stdErr;
 
-	private final ThreadLocal<Stack<String>> workingClass = ThreadLocal.withInitial(Stack::new);
-	private final ThreadLocal<Stack<String>> line = ThreadLocal.withInitial(Stack::new);
+    private final ThreadLocal<Stack<String>> workingClass = ThreadLocal.withInitial(Stack::new);
+    private final ThreadLocal<Stack<String>> line = ThreadLocal.withInitial(Stack::new);
 
-	public ThreadIDFFLogger() {
-		this(System.err, System.out);
-	}
+    public ThreadIDFFLogger() {
+        this(System.err, System.out);
+    }
 
-	public ThreadIDFFLogger(PrintStream stdOut, PrintStream stdErr) {
-		this.stdOut = stdOut;
-		this.stdErr = stdErr;
-	}
+    public ThreadIDFFLogger(PrintStream stdOut, PrintStream stdErr) {
+        this.stdOut = stdOut;
+        this.stdErr = stdErr;
+    }
 
-	@Override
-	public void writeMessage(String message, Severity severity) {
-		System.err.println(message);
-	}
+    @Override
+    public void writeMessage(String message, Severity severity) {
+        System.err.println(message);
+    }
 
-	@Override
-	public void writeMessage(String message, Severity severity, Throwable t) {
-		System.err.println(message);
-		t.printStackTrace(System.err);
-	}
+    @Override
+    public void writeMessage(String message, Severity severity, Throwable t) {
+        System.err.println(message);
+        t.printStackTrace(System.err);
+    }
 
-	private void print() {
-		Thread thread = Thread.currentThread();
-		long id = thread.getId();
+    private void print() {
+        Thread thread = Thread.currentThread();
+        long id = thread.getId();
 
-		if (line.get().isEmpty()) {
-			System.out.println(MessageFormat.format("{0} :: waiting", id));
-			return;
-		}
+        if (line.get().isEmpty()) {
+            System.out.println(MessageFormat.format("{0} :: waiting", id));
+            return;
+        }
 
-		String line = this.line.get().peek();
-		System.out.println(MessageFormat.format("{0} :: {1}", id, line).trim());
-	}
+        String line = this.line.get().peek();
+        System.out.println(MessageFormat.format("{0} :: {1}", id, line).trim());
+    }
 
-	@Override
-	public void startReadingClass(String className) {
-		workingClass.get().push(className);
-		line.get().push("Decompiling " + className);
-		print();
-	}
+    @Override
+    public void startReadingClass(String className) {
+        workingClass.get().push(className);
+        line.get().push("Decompiling " + className);
+        print();
+    }
 
-	@Override
-	public void startClass(String className) {
-		workingClass.get().push(className);
-		line.get().push("Decompiling " + className);
-		print();
-	}
+    @Override
+    public void startClass(String className) {
+        workingClass.get().push(className);
+        line.get().push("Decompiling " + className);
+        print();
+    }
 
-	@Override
-	public void startMethod(String methodName) {
-		// No need to print out methods
-	}
+    @Override
+    public void startMethod(String methodName) {
+        // No need to print out methods
+    }
 
-	@Override
-	public void endMethod() {
-	}
+    @Override
+    public void endMethod() {
+    }
 
-	@Override
-	public void endClass() {
-		line.get().pop();
-		workingClass.get().pop();
-		print();
-	}
+    @Override
+    public void endClass() {
+        line.get().pop();
+        workingClass.get().pop();
+        print();
+    }
 
-	@Override
-	public void startWriteClass(String className) {
-		line.get().push("Writing " + className);
-		print();
-	}
+    @Override
+    public void startWriteClass(String className) {
+        line.get().push("Writing " + className);
+        print();
+    }
 
-	@Override
-	public void endWriteClass() {
-		line.get().pop();
-		print();
-	}
+    @Override
+    public void endWriteClass() {
+        line.get().pop();
+        print();
+    }
 
-	@Override
-	public void endReadingClass() {
-		line.get().pop();
-		workingClass.get().pop();
-		print();
-	}
+    @Override
+    public void endReadingClass() {
+        line.get().pop();
+        workingClass.get().pop();
+        print();
+    }
 }

@@ -35,88 +35,85 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
-
-import org.gradle.api.tasks.InputFile;
-import org.gradle.api.tasks.TaskAction;
-
 import net.fabricmc.loom.api.decompilers.DecompilationMetadata;
 import net.fabricmc.loom.api.decompilers.LoomDecompiler;
 import net.fabricmc.loom.decompilers.LineNumberRemapper;
 import net.fabricmc.loom.util.gradle.ProgressLogger;
 import net.fabricmc.stitch.util.StitchUtil;
+import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.TaskAction;
 
- public class GenerateSourcesTask extends AbstractLightCraftGradleTask {
-	public final LoomDecompiler decompiler;
+public class GenerateSourcesTask extends AbstractLightCraftGradleTask {
+    public final LoomDecompiler decompiler;
 
-	private File inputJar;
+    private File inputJar;
 
-	@Inject
-	public GenerateSourcesTask(LoomDecompiler decompiler) {
-		this.decompiler = decompiler;
+    @Inject
+    public GenerateSourcesTask(LoomDecompiler decompiler) {
+        this.decompiler = decompiler;
 
-		getOutputs().upToDateWhen((o) -> false);
-	}
+        getOutputs().upToDateWhen((o) -> false);
+    }
 
-	@TaskAction
-	public void doTask() throws Throwable {
-		int threads = Runtime.getRuntime().availableProcessors();
-		Path javaDocs = MinecraftMappingsProvider.INSTANCE.provideMappings(getProject()).toPath();
-		Collection<Path> libraries = getProject().getConfigurations().getByName(ConstantsKt.MINECRAFT_LIBRARY_CONFIGURATION).getFiles()
-						.stream().map(File::toPath).collect(Collectors.toSet());
+    @TaskAction
+    public void doTask() throws Throwable {
+        int threads = Runtime.getRuntime().availableProcessors();
+        Path javaDocs = MinecraftMappingsProvider.INSTANCE.provideMappings(getProject()).toPath();
+        Collection<Path> libraries = getProject().getConfigurations().getByName(ConstantsKt.MINECRAFT_LIBRARY_CONFIGURATION).getFiles()
+                .stream().map(File::toPath).collect(Collectors.toSet());
 
-		DecompilationMetadata metadata = new DecompilationMetadata(threads, javaDocs, libraries);
-		Path runtimeJar = MappedMinecraftProvider.INSTANCE.provideMappedMinecraftDependency(getProject()).toPath();
-		Path sourcesDestination = getMappedJarFileWithSuffix("-sources.jar").toPath();
-		Path linemap = getMappedJarFileWithSuffix("-sources.lmap").toPath();
-		decompiler.decompile(inputJar.toPath(), sourcesDestination, linemap, metadata);
+        DecompilationMetadata metadata = new DecompilationMetadata(threads, javaDocs, libraries);
+        Path runtimeJar = MappedMinecraftProvider.INSTANCE.provideMappedMinecraftDependency(getProject()).toPath();
+        Path sourcesDestination = getMappedJarFileWithSuffix("-sources.jar").toPath();
+        Path linemap = getMappedJarFileWithSuffix("-sources.lmap").toPath();
+        decompiler.decompile(inputJar.toPath(), sourcesDestination, linemap, metadata);
 
-		if (Files.exists(linemap)) {
-			Path linemappedJarDestination = getMappedJarFileWithSuffix("-linemapped.jar").toPath();
+        if (Files.exists(linemap)) {
+            Path linemappedJarDestination = getMappedJarFileWithSuffix("-linemapped.jar").toPath();
 
-			// Line map the actually jar used to run the game, not the one used to decompile
-			remapLineNumbers(runtimeJar, linemap, linemappedJarDestination);
+            // Line map the actually jar used to run the game, not the one used to decompile
+            remapLineNumbers(runtimeJar, linemap, linemappedJarDestination);
 
-			Files.copy(linemappedJarDestination, runtimeJar, StandardCopyOption.REPLACE_EXISTING);
-			Files.delete(linemappedJarDestination);
-		}
-	}
+            Files.copy(linemappedJarDestination, runtimeJar, StandardCopyOption.REPLACE_EXISTING);
+            Files.delete(linemappedJarDestination);
+        }
+    }
 
-	private void remapLineNumbers(Path oldCompiledJar, Path linemap, Path linemappedJarDestination) throws IOException {
-		getProject().getLogger().info(":adjusting line numbers");
-		LineNumberRemapper remapper = new LineNumberRemapper();
-		remapper.readMappings(linemap.toFile());
+    private void remapLineNumbers(Path oldCompiledJar, Path linemap, Path linemappedJarDestination) throws IOException {
+        getProject().getLogger().info(":adjusting line numbers");
+        LineNumberRemapper remapper = new LineNumberRemapper();
+        remapper.readMappings(linemap.toFile());
 
-		ProgressLogger progressLogger = ProgressLogger.getProgressFactory(getProject(), getClass().getName());
-		progressLogger.start("Adjusting line numbers", "linemap");
+        ProgressLogger progressLogger = ProgressLogger.getProgressFactory(getProject(), getClass().getName());
+        progressLogger.start("Adjusting line numbers", "linemap");
 
-		try (StitchUtil.FileSystemDelegate inFs = StitchUtil.getJarFileSystem(oldCompiledJar.toFile(), true);
-			StitchUtil.FileSystemDelegate outFs = StitchUtil.getJarFileSystem(linemappedJarDestination.toFile(), true)) {
-			remapper.process(progressLogger, inFs.get().getPath("/"), outFs.get().getPath("/"));
-		}
+        try (StitchUtil.FileSystemDelegate inFs = StitchUtil.getJarFileSystem(oldCompiledJar.toFile(), true);
+             StitchUtil.FileSystemDelegate outFs = StitchUtil.getJarFileSystem(linemappedJarDestination.toFile(), true)) {
+            remapper.process(progressLogger, inFs.get().getPath("/"), outFs.get().getPath("/"));
+        }
 
-		progressLogger.completed();
-	}
+        progressLogger.completed();
+    }
 
-	private File getMappedJarFileWithSuffix(String suffix) {
-		File mappedJar = MappedMinecraftProvider.INSTANCE.provideMappedMinecraftDependency(getProject());
-		String path = mappedJar.getAbsolutePath();
+    private File getMappedJarFileWithSuffix(String suffix) {
+        File mappedJar = MappedMinecraftProvider.INSTANCE.provideMappedMinecraftDependency(getProject());
+        String path = mappedJar.getAbsolutePath();
 
-		if (!path.toLowerCase(Locale.ROOT).endsWith(".jar")) {
-			throw new RuntimeException("Invalid mapped JAR path: " + path);
-		}
+        if (!path.toLowerCase(Locale.ROOT).endsWith(".jar")) {
+            throw new RuntimeException("Invalid mapped JAR path: " + path);
+        }
 
-		return new File(path.substring(0, path.length() - 4) + suffix);
-	}
+        return new File(path.substring(0, path.length() - 4) + suffix);
+    }
 
-	@InputFile
-	public File getInputJar() {
-		return inputJar;
-	}
+    @InputFile
+    public File getInputJar() {
+        return inputJar;
+    }
 
-	public GenerateSourcesTask setInputJar(File inputJar) {
-		this.inputJar = inputJar;
-		return this;
-	}
+    public GenerateSourcesTask setInputJar(File inputJar) {
+        this.inputJar = inputJar;
+        return this;
+    }
 }
