@@ -27,29 +27,22 @@ object MinecraftAssetsProvider {
         val index: AssetIndex = provideAssetIndex(project)
 
         val parent: Map<String, AssetObject> = index.objects.takeIf { it.isNotEmpty() } ?: index.fileMap
-        for ((key, `object`) in parent) {
-            val sha1: String = `object`.hash ?: ""
-            val filename = if (index.isMapToResources) key else "objects" + File.separator + sha1.substring(
-                0,
-                2
-            ) + File.separator + sha1
-            if (filename.endsWith(".sha1")) continue
+        for ((assetKey, assetObject) in parent) {
+            val assetObjectHash: String = assetObject.hash ?: ""
+            val filename =
+                computeAssetFilename(index, assetKey, assetObjectHash)
+
             val file = File(assets, filename)
             project.getCachedFile(file) {
-                project.logger.lifecycle("$loggerPrefix - Downloading asset: $key")
+                project.logger.lifecycle("$loggerPrefix - Downloading asset: $assetKey")
 
                 executor.execute {
-                    val assetName = arrayOf(key)
-                    val end = assetName[0].lastIndexOf("/") + 1
-                    if (end > 0) {
-                        assetName[0] = assetName[0].substring(end)
-                    }
                     it.writeBytes(
                         URL(
-                            RESOURCES_BASE + sha1.substring(
+                            RESOURCES_BASE + assetObjectHash.substring(
                                 0,
                                 2
-                            ) + "/" + sha1
+                            ) + "/" + assetObjectHash
                         ).readBytes()
                     )
                 }
@@ -64,6 +57,18 @@ object MinecraftAssetsProvider {
             }
         } catch (e: InterruptedException) {
             throw RuntimeException(e)
+        }
+    }
+
+    private fun computeAssetFilename(
+        index: AssetIndex,
+        assetKey: String,
+        assetObjectHash: String
+    ): String {
+        return if (index.isMapToResources) {
+            assetKey
+        } else {
+            "objects" + File.separator + assetObjectHash.take(2) + File.separator + assetObjectHash
         }
     }
 
