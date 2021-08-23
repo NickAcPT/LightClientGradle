@@ -41,7 +41,11 @@ object MinecraftProvider {
             project.logger.lifecycle("$loggerPrefix - Fetching client jar for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
             val gameVersionMeta = provideGameVersionMeta(project)
 
-            jarFile.writeBytes(URL(gameVersionMeta.download("client").url).readBytes())
+            jarFile.writeBytes(
+                URL(
+                    project.lightCraftExtension.customMinecraftJarUrl ?: gameVersionMeta.download("client").url
+                ).readBytes()
+            )
 
             // Remove the pesky META-INF signature file
             removeSignature(jarFile)
