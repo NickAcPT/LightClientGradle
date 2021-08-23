@@ -66,7 +66,6 @@ open class RunClientTask : JavaExec() {
 
         // Tell LaunchWrapper that we are launching Mixins on the client side
         jvmLaunchArguments += LAUNCHWRAPPER_MIXIN_SIDE_PROP to MIXIN_SIDE_CLIENT
-        jvmLaunchArguments += LAUNCHWRAPPER_MIXIN_SIDE_PROP to MIXIN_SIDE_CLIENT
 
         // Provide Minecraft with lwjgl natives
         jvmLaunchArguments += JVM_LIBRARY_PATH_PROP to "\"${MinecraftNativesProvider.provideNativesFolder(project)}\""
@@ -98,7 +97,7 @@ open class RunClientTask : JavaExec() {
 
         // Provide our player's username
         if (isOneDotEightOrHigher) launchArguments += "--username"
-        launchArguments += LIGHTCRAFT_LAUNCH_PLAYER_NAME
+        launchArguments += extension.launchSettings.playerName
 
         // Provide Minecraft session id
         launchArguments += "-"

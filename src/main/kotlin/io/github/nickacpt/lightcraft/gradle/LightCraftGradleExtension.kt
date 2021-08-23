@@ -4,6 +4,9 @@ import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import java.io.File
 
 open class LightCraftGradleExtension {
+
+    internal val launchSettings = LightCraftLaunchSettings()
+
     var clientVersion = ClientVersion.V1_5_2
 
     var customMinecraftJarUrl: String? = null
@@ -19,5 +22,9 @@ open class LightCraftGradleExtension {
     //#endregion
 
     var provideOptifineJarMod: Boolean = false
+
+    fun launch(handler: LightCraftLaunchSettings.() -> Unit) {
+        launchSettings.handler()
+    }
 
 }
