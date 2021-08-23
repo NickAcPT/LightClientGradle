@@ -1,6 +1,7 @@
 package io.github.nickacpt.lightcraft.gradle
 
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
+import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftAssetsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftJarModsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftLibraryProvider
 import io.github.nickacpt.lightcraft.gradle.tasks.LightCraftGradleTasks
@@ -32,6 +33,9 @@ class LightCraftGradlePlugin : Plugin<Project> {
 
             // Provide Minecraft libraries
             MinecraftLibraryProvider.provideMinecraftLibraries(project)
+
+            // Provide Minecraft assets
+            MinecraftAssetsProvider.provideMinecraftAssets(project)
 
             LightCraftGradleTasks.setupTasks(project)
         }

@@ -9,6 +9,7 @@ import java.io.IOException
 import java.net.URL
 
 object MinecraftNativesProvider {
+    private val gameNativesDirectory = "game-natives${File.separatorChar}"
 
     fun provideNativesFolder(project: Project): File {
         return provideNativesFolder0(project).also {
@@ -18,12 +19,12 @@ object MinecraftNativesProvider {
         }
     }
 
-    private fun provideNativesFolder0(project: Project) = project.getCachedFile("natives").also {
+    private fun provideNativesFolder0(project: Project) = project.getCachedFile("${gameNativesDirectory}natives").also {
         it.mkdirs()
     }
 
     private fun provideJarStoreNativesFolder(project: Project): File {
-        return project.getCachedFile("natives-jarstore").also { it.mkdirs() }
+        return project.getCachedFile("${gameNativesDirectory}natives-jarstore").also { it.mkdirs() }
     }
 
     private fun getNativeFileDirs(project: Project): Pair<File, File> {

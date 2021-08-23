@@ -24,15 +24,16 @@
 
 package net.fabricmc.loom.configuration.providers.minecraft.assets;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public record AssetIndex(Map<String, AssetObject> objects, boolean virtual) {
+public record AssetIndex(@JsonProperty("map_to_resources") Boolean isMapToResources, Map<String, AssetObject> objects, Map<String, AssetObject> fileMap, boolean virtual) {
 	public AssetIndex() {
-		this(new LinkedHashMap<>(), false);
+		this(false, new LinkedHashMap<>(), new LinkedHashMap<>(), false);
 	}
 
 	public Set<AssetObject> getUniqueObjects() {

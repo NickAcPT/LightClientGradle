@@ -14,12 +14,14 @@ import java.io.File
 import java.net.URL
 
 object MinecraftMappingsProvider {
+    private val mappingsDirectory = "mappings${java.io.File.separatorChar}"
+
     private fun provideDefaultMappingUrlForVersion(version: ClientVersion): String {
         return "https://raw.githubusercontent.com/NickAcPT/LightCraftMappings/main/${version.friendlyName}/mappings-official-srg-named.tiny2?v=${System.currentTimeMillis()}"
     }
 
     private fun provideDefaultMappingForVersion(project: Project, version: ClientVersion): File {
-        return project.getCachedFile("mappings-default.tinyv2") {
+        return project.getCachedFile("${mappingsDirectory}mappings-default.tinyv2") {
             project.logger.lifecycle("$loggerPrefix - Fetching default deobfuscation mappings for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
             val mappingBytes = URL(provideDefaultMappingUrlForVersion(version)).readBytes()
             it.writeBytes(mappingBytes)
@@ -28,7 +30,7 @@ object MinecraftMappingsProvider {
 
     fun provideMappings(project: Project): File {
         val extension = project.lightCraftExtension
-        return project.getCachedFile("mappings-final.tinyv2") { finalMappingsFile ->
+        return project.getCachedFile("${mappingsDirectory}mappings-final.tinyv2") { finalMappingsFile ->
             project.logger.lifecycle("$loggerPrefix - Merging deobfuscation mappings for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
             val defaultMappingsFile = provideDefaultMappingForVersion(project, extension.clientVersion)
             val finalMappingsList = arrayListOf(defaultMappingsFile) + extension.extraMappings
