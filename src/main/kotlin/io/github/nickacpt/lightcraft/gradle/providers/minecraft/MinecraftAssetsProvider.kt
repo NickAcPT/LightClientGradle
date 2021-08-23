@@ -65,7 +65,7 @@ object MinecraftAssetsProvider {
         assetKey: String,
         assetObjectHash: String
     ): String {
-        return if (index.isMapToResources) {
+        return if (index.isMapToResources == true) {
             assetKey
         } else {
             "objects" + File.separator + assetObjectHash.take(2) + File.separator + assetObjectHash

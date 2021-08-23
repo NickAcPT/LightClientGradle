@@ -29,9 +29,10 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public record AssetIndex(@JsonProperty("map_to_resources") Boolean isMapToResources, Map<String, AssetObject> objects,
+public record AssetIndex(@JsonProperty("map_to_resources") @Nullable Boolean isMapToResources, Map<String, AssetObject> objects,
                          Map<String, AssetObject> fileMap, boolean virtual) {
     public AssetIndex() {
         this(false, new LinkedHashMap<>(), new LinkedHashMap<>(), false);
