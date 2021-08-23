@@ -22,6 +22,7 @@ const val ASM_VERSION = Opcodes.ASM9
 
 const val LIGHTCRAFT_TASK_GROUP = "lightcraft"
 
+const val LAUNCHWRAPPER_GAME_CLASS_PROP = "lightcraft.launch.game"
 const val LAUNCHWRAPPER_MAIN_CLASS_PROP = "lightcraft.launch.main"
 const val LAUNCHWRAPPER_MIXIN_SIDE_PROP = "lightcraft.launch.mixin.side"
 
@@ -33,5 +34,16 @@ const val MIXIN_SIDE_CLIENT = "CLIENT"
 const val MIXIN_SIDE_UNKNOWN = "UNKNOWN"
 
 const val LIGHTCRAFT_LAUNCH_PLAYER_NAME = "LightCraftDev"
+const val LIGHTCRAFT_LAUNCH_DEV_ENV = "lightcraft.launch.dev"
+
+private const val mixinsVersion = "0.9.2+mixin.0.8.2"
+private const val asmVersion = "9.1"
+private const val launchWrapperVersion = "21853d87de"
+
+const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
+const val asmDependency = "org.ow2.asm:asm:$asmVersion"
+const val asmTreeDependency = "org.ow2.asm:asm-tree:$asmVersion"
+const val asmUtilDependency = "org.ow2.asm:asm-util:$asmVersion"
+const val launchWrapperDependency = "com.github.NickAcPT:LegacyLauncher:$launchWrapperVersion"
 
 val objectMapper by lazy { jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }

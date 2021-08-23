@@ -47,9 +47,9 @@ fun Project.getCachedFile(name: String, versioned: Boolean = true, fetchFile: (F
 fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit): File {
     val fileName = finalFile.name
     val wasDirectory = finalFile.isDirectory
-    if (isRefreshDependencies || !finalFile.exists() || finalFile.length() == 0L) {
+    if (isRefreshDependencies || !finalFile.exists() || (!wasDirectory && finalFile.length() == 0L)) {
         if (finalFile.exists()) {
-            if (wasDirectory) finalFile.deleteRecursively() else finalFile.delete()
+            if (!wasDirectory) finalFile.delete()
         }
         if (isOffline) {
             logger.lifecycle("$loggerPrefix - Attempted to fetch file $fileName, but Gradle is in Offline mode")

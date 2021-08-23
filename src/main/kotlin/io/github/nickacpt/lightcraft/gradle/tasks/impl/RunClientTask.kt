@@ -5,6 +5,7 @@ package io.github.nickacpt.lightcraft.gradle.tasks.impl
 import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.launchWrapperConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
+import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNativesProvider
 import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
@@ -72,17 +73,30 @@ open class RunClientTask : JavaExec() {
         // Tell LaunchWrapper what Minecraft class we are launching
         jvmLaunchArguments += LAUNCHWRAPPER_MAIN_CLASS_PROP to extension.clientVersion.mainClass
 
+        // Tell LaunchWrapper what the Minecraft class is
+        jvmLaunchArguments += LAUNCHWRAPPER_GAME_CLASS_PROP to extension.clientVersion.gameClass
+
+        // Tell Minecraft that we are launching under a development environment
+        jvmLaunchArguments += LIGHTCRAFT_LAUNCH_DEV_ENV to "true"
+
         // Finally, set up our task to use these arguments
         jvmArgs = jvmLaunchArguments.map { "-D${it.first}=${it.second}" }
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {
-        //TODO: 1.8 arguments
+        val isOneDotEightOrHigher = ClientVersion.V1_8_9.ordinal >= extension.clientVersion.ordinal
 
         // Set up game launch arguments
         val launchArguments = mutableListOf<String>()
 
+        // Provide Minecraft with version/profile information if needed
+        if (isOneDotEightOrHigher) {
+            launchArguments += "--version"
+            launchArguments += project.name
+        }
+
         // Provide our player's username
+        if (isOneDotEightOrHigher) launchArguments += "--username"
         launchArguments += LIGHTCRAFT_LAUNCH_PLAYER_NAME
 
         // Provide Minecraft session id
@@ -104,6 +118,17 @@ open class RunClientTask : JavaExec() {
         project.getMixinFiles().forEach { mixinFile ->
             launchArguments += "--mixin"
             launchArguments += mixinFile.name
+        }
+
+        // Add 1.8.9 (and higher) arguments
+        if (isOneDotEightOrHigher) {
+            // Provide Minecraft with access token
+            launchArguments += "--accessToken"
+            launchArguments += "0"
+
+            // Provide Minecraft with default user properties
+            launchArguments += "--userProperties"
+            launchArguments += "{}"
         }
 
         // Finally, set up our task to use these arguments
