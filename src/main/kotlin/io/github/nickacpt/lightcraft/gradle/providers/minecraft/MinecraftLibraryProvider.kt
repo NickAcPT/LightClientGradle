@@ -11,7 +11,7 @@ object MinecraftLibraryProvider {
 
     private const val mixinsVersion = "0.9.2+mixin.0.8.2"
     private const val asmVersion = "9.1"
-    private const val launchWrapperVersion = "3e30134642"
+    private const val launchWrapperVersion = "a468ede9da"
 
     const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
     const val asmDependency = "org.ow2.asm:asm:$asmVersion"

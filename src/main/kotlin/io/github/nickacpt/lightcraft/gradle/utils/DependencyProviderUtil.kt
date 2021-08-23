@@ -27,7 +27,9 @@ fun Project.provideDependency(
 
     project.repositories.flatDir { it.dir(finalJarFile.parentFile) }
 
-    project.dependencies.add(configuration, providedDependency)
+    if (!project.configurations.getByName(configuration).dependencies.contains(providedDependency)) {
+        project.dependencies.add(configuration, providedDependency)
+    }
 
     return finalJarFile
 }

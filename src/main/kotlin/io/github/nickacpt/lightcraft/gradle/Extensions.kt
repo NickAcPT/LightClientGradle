@@ -44,20 +44,28 @@ fun Project.getCachedFile(name: String, versioned: Boolean = true, fetchFile: (F
     return finalFile
 }
 
-fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit) {
+fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit): File {
     val fileName = finalFile.name
+    val wasDirectory = finalFile.isDirectory
     if (isRefreshDependencies || !finalFile.exists() || finalFile.length() == 0L) {
         if (finalFile.exists()) {
-            if (finalFile.isDirectory) finalFile.deleteRecursively() else finalFile.delete()
+            if (wasDirectory) finalFile.deleteRecursively() else finalFile.delete()
         }
         if (isOffline) {
             logger.lifecycle("$loggerPrefix - Attempted to fetch file $fileName, but Gradle is in Offline mode")
             throw Exception("LightCraftGradle attempted to fetch $fileName, but it doesn't exist and Gradle is offline mode - Build cannot be finished")
         } else {
-            finalFile.createNewFile()
+            if (wasDirectory) {
+                finalFile.mkdirs()
+            } else {
+                finalFile.parentFile.mkdirs()
+                finalFile.createNewFile()
+            }
             fetchFile(finalFile)
         }
     }
+
+    return finalFile
 }
 
 val Project.finalJarTask: Task

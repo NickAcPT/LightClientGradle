@@ -22,8 +22,10 @@ const val ASM_VERSION = Opcodes.ASM9
 
 const val LIGHTCRAFT_TASK_GROUP = "lightcraft"
 
-const val LAUNCHWRAPPER_MAIN_CLASS = "lightcraft.launch.main"
+const val LAUNCHWRAPPER_MAIN_CLASS_PROP = "lightcraft.launch.main"
 const val LAUNCHWRAPPER_MIXIN_SIDE_PROP = "lightcraft.launch.mixin.side"
+
+const val JVM_LIBRARY_PATH_PROP = "java.library.path"
 
 const val MIXIN_SIDE_DEDICATEDSERVER = "DEDICATEDSERVER"
 const val MIXIN_SIDE_SERVER = "SERVER"

@@ -6,6 +6,7 @@ import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.launchWrapperConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
+import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNativesProvider
 import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.JavaExec
@@ -63,20 +64,29 @@ open class RunClientTask : JavaExec() {
 
         // Tell LaunchWrapper that we are launching Mixins on the client side
         jvmLaunchArguments += LAUNCHWRAPPER_MIXIN_SIDE_PROP to MIXIN_SIDE_CLIENT
+        jvmLaunchArguments += LAUNCHWRAPPER_MIXIN_SIDE_PROP to MIXIN_SIDE_CLIENT
+
+        // Provide Minecraft with lwjgl natives
+        jvmLaunchArguments += JVM_LIBRARY_PATH_PROP to "\"${MinecraftNativesProvider.provideNativesFolder(project)}\""
 
         // Tell LaunchWrapper what Minecraft class we are launching
-        jvmLaunchArguments += LAUNCHWRAPPER_MAIN_CLASS to extension.clientVersion.mainClass
+        jvmLaunchArguments += LAUNCHWRAPPER_MAIN_CLASS_PROP to extension.clientVersion.mainClass
 
         // Finally, set up our task to use these arguments
         jvmArgs = jvmLaunchArguments.map { "-D${it.first}=${it.second}" }
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {
+        //TODO: 1.8 arguments
+
         // Set up game launch arguments
         val launchArguments = mutableListOf<String>()
 
         // Provide our player's username
         launchArguments += LIGHTCRAFT_LAUNCH_PLAYER_NAME
+
+        // Provide Minecraft session id
+        launchArguments += "-"
 
         // Provide our game directory
         launchArguments += "--gameDir"
