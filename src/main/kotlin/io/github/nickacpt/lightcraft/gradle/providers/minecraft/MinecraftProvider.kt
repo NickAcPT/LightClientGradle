@@ -2,16 +2,12 @@ package io.github.nickacpt.lightcraft.gradle.providers.minecraft
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.nickacpt.lightcraft.gradle.*
-import io.github.nickacpt.lightcraft.gradle.utils.AccessExposerClassVisitor
+import io.github.nickacpt.lightcraft.gradle.utils.exposeAccessToPublic
 import net.fabricmc.loom.configuration.providers.minecraft.ManifestVersion
 import net.fabricmc.loom.configuration.providers.minecraft.MinecraftVersionMeta
 import org.gradle.api.Project
-import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassWriter
 import java.io.File
 import java.net.URL
-import java.nio.file.*
-import java.nio.file.attribute.BasicFileAttributes
 
 object MinecraftProvider {
 
@@ -51,32 +47,7 @@ object MinecraftProvider {
             removeSignature(jarFile)
 
             // Go through each class and make sure that all the classes/fields/methods are publicly accessible
-            exposeClasses(jarFile)
-        }
-    }
-
-    private fun exposeClasses(jarFile: File) {
-        FileSystems.newFileSystem(jarFile.toPath()).use { inputFs ->
-            Files.walkFileTree(inputFs.getPath("/"), object : SimpleFileVisitor<Path>() {
-                override fun visitFile(file: Path, attrs: BasicFileAttributes?): FileVisitResult {
-                    if (file.fileName.toString().endsWith(".class")) {
-                        val bytes = Files.readAllBytes(file)
-                        val reader = ClassReader(bytes)
-                        val writer = ClassWriter(0)
-
-                        reader.accept(AccessExposerClassVisitor(writer), 0)
-
-                        Files.deleteIfExists(file)
-                        Files.write(
-                            file,
-                            writer.toByteArray()
-                        )
-
-                    }
-                    return FileVisitResult.CONTINUE
-                }
-            })
-
+            jarFile.exposeAccessToPublic()
         }
     }
 }
