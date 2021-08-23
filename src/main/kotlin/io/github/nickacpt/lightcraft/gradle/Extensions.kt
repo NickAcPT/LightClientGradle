@@ -47,7 +47,7 @@ fun Project.getCachedFile(name: String, versioned: Boolean = true, fetchFile: (F
 fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit): File {
     val fileName = finalFile.name
     val wasDirectory = finalFile.isDirectory
-    if (isRefreshDependencies || !finalFile.exists() || (!wasDirectory && finalFile.length() == 0L)) {
+    if (isRefreshDependencies || !finalFile.exists() || (getFileLength(finalFile) == 0)) {
         if (finalFile.exists()) {
             if (!wasDirectory) finalFile.delete()
         }
@@ -67,6 +67,10 @@ fun Project.getCachedFile(finalFile: File, fetchFile: (File) -> Unit): File {
 
     return finalFile
 }
+
+private fun getFileLength(finalFile: File): Int =
+    if (finalFile.isDirectory) finalFile.list()!!.size else finalFile.length()
+        .toInt()
 
 val Project.finalJarTask: Task
     get() = kotlin.runCatching { tasks.getByName("shadowJar") }.getOrNull() ?: tasks.getByName("jar")

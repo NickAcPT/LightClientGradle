@@ -7,6 +7,7 @@ import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.launchWrapp
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
+import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftAssetsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNativesProvider
 import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
 import org.gradle.api.plugins.JavaPlugin
@@ -105,6 +106,10 @@ open class RunClientTask : JavaExec() {
         // Provide our game directory
         launchArguments += "--gameDir"
         launchArguments += "\"${workingDir.absolutePath}\""
+
+        // Provide our game assets directory
+        launchArguments += "--assetsDir"
+        launchArguments += "\"${MinecraftAssetsProvider.provideMinecraftAssets(project).absolutePath}\""
 
         // Provide Vanilla LaunchWrapper tweaker
         launchArguments += "--tweakClass"
