@@ -32,8 +32,24 @@ object MinecraftMappingsProvider {
         val extension = project.lightCraftExtension
         return project.getCachedFile("${mappingsDirectory}mappings-final.tinyv2") { finalMappingsFile ->
             project.logger.lifecycle("$loggerPrefix - Merging deobfuscation mappings for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            val preMappingsList =
+                provideMappingsFileAndUrl(
+                    project,
+                    extension.extraPreMappingUrls,
+                    extension.extraPreMappingFiles,
+                    "pre"
+                )
+
+            val postMappingsList =
+                provideMappingsFileAndUrl(
+                    project,
+                    extension.extraPostMappingUrls,
+                    extension.extraPostMappingFiles,
+                    "post"
+                )
+
             val defaultMappingsFile = provideDefaultMappingForVersion(project, extension.clientVersion)
-            val finalMappingsList = arrayListOf(defaultMappingsFile) + extension.extraMappings
+            val finalMappingsList = preMappingsList + defaultMappingsFile + postMappingsList
 
             val finalTree = MemoryMappingTree()
             finalMappingsList.forEach {
@@ -45,5 +61,18 @@ object MinecraftMappingsProvider {
                 finalTree.accept(MissingDescFilter(it))
             }
         }
+    }
+
+    private fun provideMappingsFileAndUrl(
+        project: Project,
+        mappingUrls: MutableList<String>,
+        mappingFiles: MutableList<File>,
+        prefix: String
+    ): List<File> {
+        return mappingUrls.mapIndexed { i, it ->
+            project.getCachedFile("${mappingsDirectory}${prefix}${File.separatorChar}mappings-$i.tinyv2") { outFile ->
+                outFile.writeBytes(URL(it).readBytes())
+            }
+        } + mappingFiles
     }
 }

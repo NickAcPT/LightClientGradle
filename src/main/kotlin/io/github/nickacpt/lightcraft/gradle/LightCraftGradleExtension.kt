@@ -6,7 +6,13 @@ import java.io.File
 open class LightCraftGradleExtension {
     var clientVersion = ClientVersion.V1_5_2
 
-    var extraMappings: MutableList<File> = mutableListOf()
+    var extraPostMappingFiles: MutableList<File> = mutableListOf()
+
+    var extraPostMappingUrls: MutableList<String> = mutableListOf()
+
+    var extraPreMappingFiles: MutableList<File> = mutableListOf()
+
+    var extraPreMappingUrls: MutableList<String> = mutableListOf()
 
     var provideOptifineJarMod: Boolean = false
 }
