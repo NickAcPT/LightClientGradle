@@ -9,6 +9,10 @@ open class LightCraftGradleExtension {
 
     var clientVersion = ClientVersion.V1_5_2
 
+    fun computeVersionName() =
+        customMinecraftVersionName ?: clientVersion.friendlyName
+
+    var customMinecraftVersionName: String? = null
     var customMinecraftJarUrl: String? = null
 
     //#region Pre Mappings
@@ -20,6 +24,8 @@ open class LightCraftGradleExtension {
     var extraPostMappingUrls: MutableList<String> = mutableListOf()
     var extraPostMappingFiles: MutableList<File> = mutableListOf()
     //#endregion
+
+    var defaultMappingsSourceNamespace = MAPPING_SOURCE_NS
 
     var provideOptifineJarMod: Boolean = false
 

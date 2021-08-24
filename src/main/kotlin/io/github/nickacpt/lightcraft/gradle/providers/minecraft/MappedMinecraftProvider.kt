@@ -27,7 +27,7 @@ object MappedMinecraftProvider {
         val finalMappingsFile = MinecraftMappingsProvider.provideMappings(project)
 
         return project.getCachedFile("minecraft-mapped.jar") { mappedMinecraftJar ->
-            project.logger.lifecycle("$loggerPrefix - Remapping Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Remapping Minecraft ${project.lightCraftExtension.computeVersionName()}")
 
             mappedMinecraftJar.delete()
             remapJar(

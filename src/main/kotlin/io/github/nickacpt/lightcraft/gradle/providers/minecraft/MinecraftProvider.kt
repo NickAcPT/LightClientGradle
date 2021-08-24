@@ -38,7 +38,7 @@ object MinecraftProvider {
 
     fun provideMinecraftFile(project: Project): File {
         return project.getCachedFile("minecraft.jar") { jarFile ->
-            project.logger.lifecycle("$loggerPrefix - Fetching client jar for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Fetching client jar for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             val gameVersionMeta = provideGameVersionMeta(project)
 
             jarFile.writeBytes(

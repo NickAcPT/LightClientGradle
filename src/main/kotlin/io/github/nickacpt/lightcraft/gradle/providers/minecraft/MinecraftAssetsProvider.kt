@@ -15,7 +15,7 @@ object MinecraftAssetsProvider {
 
     fun provideMinecraftAssets(project: Project): File {
         return project.getCachedFile(provideAssetsFolder0(project)) {
-            project.logger.lifecycle("$loggerPrefix - Downloading assets for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Downloading assets for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             downloadAssets(project, it)
         }
     }
@@ -74,7 +74,7 @@ object MinecraftAssetsProvider {
 
     private fun provideAssetIndexFile(project: Project): File {
         return project.getCachedFile("assetIndex.json") {
-            project.logger.lifecycle("$loggerPrefix - Downloading asset index for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Downloading asset index for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             it.writeBytes(URL(MinecraftProvider.provideGameVersionMeta(project).assetIndex.url).readBytes())
         }
     }

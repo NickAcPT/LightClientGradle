@@ -40,7 +40,7 @@ object MinecraftJarModsProvider {
 
     fun provideJarModdedMinecraftJar(project: Project): File {
         return project.getCachedFile("minecraft-merged.jar") { finalMergedJar ->
-            project.logger.lifecycle("$loggerPrefix - Merging Jar Mods for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Merging Jar Mods for Minecraft ${project.lightCraftExtension.computeVersionName()}")
 
             val unMappedMinecraftJar = MinecraftProvider.provideMinecraftFile(project)
             unMappedMinecraftJar.copyTo(finalMergedJar, true)

@@ -30,12 +30,13 @@ fun Project.getCacheFileDir(): File {
 }
 
 fun Project.getCachedFile(name: String, versioned: Boolean = true): File {
-    val versionName = lightCraftExtension.clientVersion.friendlyName
+    val versionName = lightCraftExtension.computeVersionName()
     var parent = getCacheFileDir()
     if (versioned) parent = File(getCacheFileDir(), versionName).also { it.mkdirs() }
 
     return File(parent, name)
 }
+
 
 fun Project.getCachedFile(name: String, versioned: Boolean = true, fetchFile: (File) -> Unit): File {
     val finalFile = getCachedFile(name, versioned)

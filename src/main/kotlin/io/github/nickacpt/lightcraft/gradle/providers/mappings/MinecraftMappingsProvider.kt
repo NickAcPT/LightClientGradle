@@ -22,7 +22,7 @@ object MinecraftMappingsProvider {
 
     private fun provideDefaultMappingForVersion(project: Project, version: ClientVersion): File {
         return project.getCachedFile("${mappingsDirectory}mappings-default.tinyv2") {
-            project.logger.lifecycle("$loggerPrefix - Fetching default deobfuscation mappings for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Fetching default deobfuscation mappings for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             val mappingBytes = URL(provideDefaultMappingUrlForVersion(version)).readBytes()
             it.writeBytes(mappingBytes)
         }
@@ -31,7 +31,7 @@ object MinecraftMappingsProvider {
     fun provideMappings(project: Project): File {
         val extension = project.lightCraftExtension
         return project.getCachedFile("${mappingsDirectory}mappings-final.tinyv2") { finalMappingsFile ->
-            project.logger.lifecycle("$loggerPrefix - Merging deobfuscation mappings for Minecraft ${project.lightCraftExtension.clientVersion.friendlyName}")
+            project.logger.lifecycle("$loggerPrefix - Merging deobfuscation mappings for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             val preMappingsList =
                 provideMappingsFileAndUrl(
                     project,
