@@ -84,7 +84,7 @@ open class RunClientTask : JavaExec() {
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {
-        val isOneDotEightOrHigher = ClientVersion.V1_8_9.ordinal >= extension.clientVersion.ordinal
+        val isOneDotEightOrHigher = extension.clientVersion.ordinal >= ClientVersion.V1_8_9.ordinal
 
         // Set up game launch arguments
         val launchArguments = mutableListOf<String>()
