@@ -1,11 +1,13 @@
 package io.github.nickacpt.lightcraft.gradle.providers.mappings
 
+import io.github.nickacpt.lightcraft.gradle.MAPPING_SOURCE_NS
 import io.github.nickacpt.lightcraft.gradle.getCachedFile
 import io.github.nickacpt.lightcraft.gradle.lightCraftExtension
 import io.github.nickacpt.lightcraft.gradle.loggerPrefix
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import net.fabricmc.mappingio.MappingReader
 import net.fabricmc.mappingio.MappingWriter
+import net.fabricmc.mappingio.adapter.MappingNsRenamer
 import net.fabricmc.mappingio.adapter.MissingDescFilter
 import net.fabricmc.mappingio.format.MappingFormat
 import net.fabricmc.mappingio.tree.MemoryMappingTree
@@ -25,6 +27,23 @@ object MinecraftMappingsProvider {
             project.logger.lifecycle("$loggerPrefix - Fetching default deobfuscation mappings for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             val mappingBytes = URL(provideDefaultMappingUrlForVersion(version)).readBytes()
             it.writeBytes(mappingBytes)
+
+            updateSourceNamespaceForDefaultMappings(project, it)
+        }
+    }
+
+    private fun updateSourceNamespaceForDefaultMappings(project: Project, it: File) {
+        val defaultMappingsSourceNamespace = project.lightCraftExtension.defaultMappingsSourceNamespace
+        // No need to rename default mapping source namespace
+        if (defaultMappingsSourceNamespace == MAPPING_SOURCE_NS) return
+        val tree = MemoryMappingTree()
+
+        // Load original mappings
+        MappingReader.read(it.toPath(), tree)
+
+        // Rename Namespace and write it back to original location
+        MappingWriter.create(it.toPath(), MappingFormat.TINY_2).use {
+            tree.accept(MappingNsRenamer(it, mutableMapOf(MAPPING_SOURCE_NS to defaultMappingsSourceNamespace)))
         }
     }
 
@@ -58,7 +77,10 @@ object MinecraftMappingsProvider {
 
             finalMappingsFile.delete()
             MappingWriter.create(finalMappingsFile.toPath(), MappingFormat.TINY_2).use {
-                finalTree.accept(MissingDescFilter(it))
+                // Fix missing names by propagating names from previous namespaces
+                // Then, ignore all fields and methods that are missing a descriptor (since it's invalid Tiny V2)
+                // Finally write the merged tree to a file
+                finalTree.accept(MissingNamespacePropagator(finalTree, MissingDescFilter(it)))
             }
         }
     }
