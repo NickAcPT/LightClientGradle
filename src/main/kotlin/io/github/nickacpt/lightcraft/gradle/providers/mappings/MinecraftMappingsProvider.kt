@@ -16,19 +16,34 @@ import java.io.File
 import java.net.URL
 
 object MinecraftMappingsProvider {
-    private val mappingsDirectory = "mappings${java.io.File.separatorChar}"
+    private val mappingsDirectory = "mappings${File.separatorChar}"
 
-    private fun provideDefaultMappingUrlForVersion(version: ClientVersion): String {
-        return "https://raw.githubusercontent.com/NickAcPT/LightCraftMappings/main/${version.friendlyName}/mappings-official-srg-named.tiny2?v=${System.currentTimeMillis()}"
+    private fun provideDefaultMappingUrlsForVersion(version: ClientVersion): List<String> {
+        val urlsList =
+            mutableListOf("https://raw.githubusercontent.com/NickAcPT/LightCraftMappings/main/${version.friendlyName}/mappings-official-srg-named.tiny2?v=${System.currentTimeMillis()}")
+        if (version.hasExtraMappings) {
+            urlsList.add("https://raw.githubusercontent.com/NickAcPT/LightCraftMappings/main/${version.friendlyName}/mappings-extra.tinyv2?v=${System.currentTimeMillis()}")
+        }
+        return urlsList
     }
 
     private fun provideDefaultMappingForVersion(project: Project, version: ClientVersion): File {
-        return project.getCachedFile("${mappingsDirectory}mappings-default.tinyv2") {
+        return project.getCachedFile("${mappingsDirectory}mappings-default-final.tinyv2") { finalFile ->
             project.logger.lifecycle("$loggerPrefix - Fetching default deobfuscation mappings for Minecraft ${project.lightCraftExtension.computeVersionName()}")
-            val mappingBytes = URL(provideDefaultMappingUrlForVersion(version)).readBytes()
-            it.writeBytes(mappingBytes)
 
-            updateSourceNamespaceForDefaultMappings(project, it)
+            // First, load all default mappings
+            val mappingFiles = provideDefaultMappingUrlsForVersion(version).mapIndexed {i, url ->
+                project.getCachedFile("${mappingsDirectory}mappings-default-$i.tinyv2") {
+                    val mappingBytes = URL(url).readBytes()
+                    it.writeBytes(mappingBytes)
+                }
+            }
+
+            // Then, once we have them loaded, merge them together to the final file
+            mergeMappings(mappingFiles, finalFile)
+
+            // Then, if needed, update the source namespace of these mappings
+            updateSourceNamespaceForDefaultMappings(project, finalFile)
         }
     }
 
@@ -70,18 +85,22 @@ object MinecraftMappingsProvider {
             val defaultMappingsFile = provideDefaultMappingForVersion(project, extension.clientVersion)
             val finalMappingsList = preMappingsList + defaultMappingsFile + postMappingsList
 
-            val finalTree = MemoryMappingTree()
-            finalMappingsList.forEach {
-                MappingReader.read(it.toPath(), finalTree)
-            }
+            mergeMappings(finalMappingsList, finalMappingsFile)
+        }
+    }
 
-            finalMappingsFile.delete()
-            MappingWriter.create(finalMappingsFile.toPath(), MappingFormat.TINY_2).use {
-                // Fix missing names by propagating names from previous namespaces
-                // Then, ignore all fields and methods that are missing a descriptor (since it's invalid Tiny V2)
-                // Finally write the merged tree to a file
-                finalTree.accept(MissingNamespacePropagator(finalTree, MissingDescFilter(it)))
-            }
+    private fun mergeMappings(inputMappings: List<File>, outputFile: File) {
+        val finalTree = MemoryMappingTree()
+        inputMappings.forEach {
+            MappingReader.read(it.toPath(), finalTree)
+        }
+
+        outputFile.delete()
+        MappingWriter.create(outputFile.toPath(), MappingFormat.TINY_2).use {
+            // Fix missing names by propagating names from previous namespaces
+            // Then, ignore all fields and methods that are missing a descriptor (since it's invalid Tiny V2)
+            // Finally write the merged tree to a file
+            finalTree.accept(MissingNamespacePropagator(finalTree, MissingDescFilter(it)))
         }
     }
 
