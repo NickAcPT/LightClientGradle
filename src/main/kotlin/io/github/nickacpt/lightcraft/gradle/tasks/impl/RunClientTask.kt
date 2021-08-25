@@ -10,6 +10,7 @@ import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftP
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftAssetsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNativesProvider
 import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
+import io.github.nickacpt.lightcraft.gradle.utils.resolveClasspathAsPath
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.JavaExec
 import java.io.File
@@ -44,8 +45,11 @@ open class RunClientTask : JavaExec() {
         // Depend on the Minecraft libraries
         jarsToDepend += project.minecraftLibraryConfiguration.resolve()
 
+        // Depend on the project's dependencies
+        jarsToDepend += project.resolveClasspathAsPath().map { it.toFile() }
+
         // Finally, set up our dependency on these files
-        classpath(*jarsToDepend.toTypedArray())
+        classpath(*jarsToDepend.distinct().toTypedArray())
     }
 
     private fun setupWorkingDirectory() {
