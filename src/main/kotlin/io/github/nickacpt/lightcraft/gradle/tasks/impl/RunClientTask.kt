@@ -88,19 +88,19 @@ open class RunClientTask : JavaExec() {
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {
-        val isOneDotEightOrHigher = extension.clientVersion.ordinal >= ClientVersion.V1_8_9.ordinal
+        val isOneDotSevenOrHigher = extension.clientVersion.ordinal >= ClientVersion.V1_7_10.ordinal
 
         // Set up game launch arguments
         val launchArguments = mutableListOf<String>()
 
         // Provide Minecraft with version/profile information if needed
-        if (isOneDotEightOrHigher) {
+        if (isOneDotSevenOrHigher) {
             launchArguments += "--version"
             launchArguments += project.name
         }
 
         // Provide our player's username
-        if (isOneDotEightOrHigher) launchArguments += "--username"
+        if (isOneDotSevenOrHigher) launchArguments += "--username"
         launchArguments += extension.launchSettings.playerName
 
         // Provide Minecraft session id
@@ -128,8 +128,8 @@ open class RunClientTask : JavaExec() {
             launchArguments += mixinFile.name
         }
 
-        // Add 1.8.9 (and higher) arguments
-        if (isOneDotEightOrHigher) {
+        // Add 1.7.10 (and higher) arguments
+        if (isOneDotSevenOrHigher) {
             // Provide Minecraft with access token
             launchArguments += "--accessToken"
             launchArguments += "0"

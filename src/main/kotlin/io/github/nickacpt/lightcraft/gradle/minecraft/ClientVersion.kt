@@ -8,5 +8,6 @@ enum class ClientVersion(
     val hasExtraMappings: Boolean = false
 ) {
     V1_5_2("1.5.2", "net.minecraft.client.Minecraft", hasLegacyAssets = true, hasExtraMappings = true),
+    V1_7_10("1.7.10", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
     V1_8_9("1.8.9", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft")
 }
