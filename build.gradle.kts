@@ -63,3 +63,16 @@ tasks {
         targetCompatibility = "16"
     }
 }
+
+
+publishing {
+    repositories {
+        val lightCraftRepoDir = project.findProperty("lightcraft.repo.location")
+        if (lightCraftRepoDir != null) {
+            maven {
+                name = "LightCraftRepo"
+                url = File(lightCraftRepoDir.toString()).toURI()
+            }
+        }
+    }
+}
