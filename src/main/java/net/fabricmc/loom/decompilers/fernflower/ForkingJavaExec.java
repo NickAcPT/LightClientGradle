@@ -51,7 +51,7 @@ public class ForkingJavaExec {
     }
 
     private static FileCollection getRuntimeClasspath(Project project) {
-        ConfigurationContainer configurations = project.getBuildscript().getConfigurations();
+        ConfigurationContainer configurations = project.getRootProject().getBuildscript().getConfigurations();
         DependencyHandler handler = project.getDependencies();
         return configurations.getByName("classpath")
                 .plus(configurations.detachedConfiguration(handler.localGroovy()));

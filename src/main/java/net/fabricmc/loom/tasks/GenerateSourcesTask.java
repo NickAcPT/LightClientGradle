@@ -72,7 +72,7 @@ public class GenerateSourcesTask extends AbstractLightCraftGradleTask {
         if (Files.exists(linemap)) {
             Path linemappedJarDestination = getMappedJarFileWithSuffix("-linemapped.jar").toPath();
 
-            // Line map the actually jar used to run the game, not the one used to decompile
+            // Line map the actual jar used to run the game, not the one used to decompile
             remapLineNumbers(runtimeJar, linemap, linemappedJarDestination);
 
             Files.copy(linemappedJarDestination, runtimeJar, StandardCopyOption.REPLACE_EXISTING);
