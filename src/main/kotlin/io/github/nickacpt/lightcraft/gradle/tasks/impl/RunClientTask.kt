@@ -83,8 +83,24 @@ open class RunClientTask : JavaExec() {
         // Tell Minecraft that we are launching under a development environment
         jvmLaunchArguments += LIGHTCRAFT_LAUNCH_DEV_ENV to "true"
 
+        if (extension.launchSettings.enableMixinsDebug) {
+            // Tell Sponge Mixin that we want to enable all debug features
+            jvmLaunchArguments += MIXINS_DEBUG to "true"
+        }
+
+        // Add Sponge Mixin java agent for hotswap
+        val mixinsJar = getSpongeMixinJar()
+        val spongeMixinJavaAgent = "-javaagent:${mixinsJar.absolutePath}"
+
         // Finally, set up our task to use these arguments
-        jvmArgs = jvmLaunchArguments.map { "-D${it.first}=${it.second}" }
+        jvmArgs = jvmLaunchArguments.map { "-D${it.first}=${it.second}" } + spongeMixinJavaAgent
+    }
+
+    private fun getSpongeMixinJar(): File {
+        val mixinsJarConfig = project.configurations.detachedConfiguration()
+        mixinsJarConfig.dependencies.add(project.dependencies.create(mixinDependency))
+        val mixinsJar = mixinsJarConfig.resolve().first()
+        return mixinsJar
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {

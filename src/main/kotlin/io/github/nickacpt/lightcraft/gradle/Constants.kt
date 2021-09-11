@@ -36,6 +36,8 @@ const val MIXIN_SIDE_UNKNOWN = "UNKNOWN"
 const val LIGHTCRAFT_LAUNCH_PLAYER_NAME = "LightCraftDev"
 const val LIGHTCRAFT_LAUNCH_DEV_ENV = "lightcraft.launch.dev"
 
+const val MIXINS_DEBUG = "mixin.debug"
+
 private const val mixinsVersion = "0.9.2+mixin.0.8.2"
 private const val asmVersion = "9.1"
 private const val launchWrapperVersion = "21853d87de"
