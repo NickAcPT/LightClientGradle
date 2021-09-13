@@ -11,5 +11,5 @@ enum class ClientVersion(
     V1_6_4("1.6.4", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
     V1_7_10("1.7.10", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
     V1_8_9("1.8.9", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
-    V1_8_9("1.17.1", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft")
+    V1_17_1("1.17.1", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft")
 }
