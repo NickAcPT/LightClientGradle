@@ -16,9 +16,12 @@ import java.io.File
 import java.net.URL
 
 object MinecraftMappingsProvider {
-    private val mappingsDirectory = "mappings${File.separatorChar}"
+    val mappingsDirectory = "mappings${File.separatorChar}"
 
     private fun provideDefaultMappingUrlsForVersion(version: ClientVersion): List<String> {
+        // Mojang mappings are provided separately if available
+        if (version.hasMojangMappings) return emptyList()
+
         val urlsList =
             mutableListOf("https://raw.githubusercontent.com/NickAcPT/LightCraftMappings/main/${version.friendlyName}/mappings-official-srg-named.tiny2?v=${System.currentTimeMillis()}")
         if (version.hasExtraMappings) {
@@ -37,6 +40,10 @@ object MinecraftMappingsProvider {
                     val mappingBytes = URL(url).readBytes()
                     it.writeBytes(mappingBytes)
                 }
+            }.toMutableList()
+
+            if (version.hasMojangMappings) {
+                mappingFiles.add(MojangMappingsProvider.provideMappingsFile(project))
             }
 
             // Then, once we have them loaded, merge them together to the final file

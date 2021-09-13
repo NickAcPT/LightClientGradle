@@ -5,10 +5,13 @@ enum class ClientVersion(
     val mainClass: String,
     val gameClass: String = mainClass,
     val hasLegacyAssets: Boolean = false,
-    val hasExtraMappings: Boolean = false
+    val hasExtraMappings: Boolean = false,
+    val hasMojangMappings: Boolean = false
 ) {
     V1_5_2("1.5.2", "net.minecraft.client.Minecraft", hasLegacyAssets = true, hasExtraMappings = true),
     V1_6_4("1.6.4", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
     V1_7_10("1.7.10", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
-    V1_8_9("1.8.9", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft")
+    V1_8_9("1.8.9", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
+
+    V1_17_1("1.17.1", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft", hasMojangMappings = true)
 }

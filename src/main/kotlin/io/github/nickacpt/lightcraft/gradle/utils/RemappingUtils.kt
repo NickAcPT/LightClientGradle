@@ -1,9 +1,11 @@
 package io.github.nickacpt.lightcraft.gradle.utils
 
+import net.fabricmc.loom.util.TinyRemapperMappingsHelper
+import net.fabricmc.mappingio.MappingReader
+import net.fabricmc.mappingio.tree.MemoryMappingTree
 import net.fabricmc.tinyremapper.NonClassCopyMode
 import net.fabricmc.tinyremapper.OutputConsumerPath
 import net.fabricmc.tinyremapper.TinyRemapper
-import net.fabricmc.tinyremapper.TinyUtils
 import org.gradle.api.Project
 import java.io.File
 import java.io.IOException
@@ -29,13 +31,20 @@ fun remapJar(
     resolveClassPath: Boolean = false
 ) {
     val remapper = TinyRemapper.newRemapper()
-        .also {
+        .also { builder ->
             if (mappings == null) return@also
-            it.withMappings(
-                TinyUtils.createTinyMappingProvider(
-                    mappings.file.toPath(),
+
+            val tree = MemoryMappingTree()
+            mappings.file.reader().use {
+                MappingReader.read(it, tree)
+            }
+
+            builder.withMappings(
+                TinyRemapperMappingsHelper.create(
+                    tree,
                     mappings.from,
-                    mappings.to
+                    mappings.to,
+                    true
                 )
             )
                 .renameInvalidLocals(true)

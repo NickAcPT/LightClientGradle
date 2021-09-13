@@ -12,12 +12,13 @@ object MinecraftJarModsProvider {
 
     private const val jarModsFolder = "jarMods"
 
-    private fun provideOptifineJarUrl(version: ClientVersion): String {
+    private fun provideOptifineJarUrl(version: ClientVersion): String? {
         return when (version) {
             ClientVersion.V1_5_2 -> "https://www.dropbox.com/s/qj3ceu7qtvlw7ay/OptiFine_1.5.2_HD_U_D5%20%282%29.zip?dl=1"
             ClientVersion.V1_6_4 -> "https://www.dropbox.com/s/m5tgeji66ph6hbv/OptiFine_1.6.4_HD_U_D1.jar?dl=1"
             ClientVersion.V1_7_10 -> "https://www.dropbox.com/s/126f2dyqf6hu6kl/OptiFine_1.7.10_HD_U_E7_MOD.jar?dl=1"
             ClientVersion.V1_8_9 -> "https://www.dropbox.com/s/yab27828fuw4a0r/OptiFine_1.8.9_HD_U_M5_MOD.jar?dl=1"
+            ClientVersion.V1_17_1 -> null
         }
     }
 
@@ -27,8 +28,14 @@ object MinecraftJarModsProvider {
         //Create JarMods folder
         prepareJarModsFolder(project)
 
+        val optifineJarUrl = provideOptifineJarUrl(clientVersion)
+        if (optifineJarUrl == null) {
+            project.logger.warn("$loggerPrefix - You have requested for optifine to be added, but this version doesn't have support for OptiFine")
+            return
+        }
+
         val optifineJar = project.getCachedFile(jarModsFolder + File.separatorChar + "jarmod-optifine.jar") {
-            it.writeBytes(URL(provideOptifineJarUrl(clientVersion)).readBytes())
+            it.writeBytes(URL(optifineJarUrl).readBytes())
         }
 
         project.provideDependency(
