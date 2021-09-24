@@ -29,8 +29,7 @@ object MinecraftAssetsProvider {
         val parent: Map<String, AssetObject> = index.objects.takeIf { it.isNotEmpty() } ?: index.fileMap
         for ((assetKey, assetObject) in parent) {
             val assetObjectHash: String = assetObject.hash ?: ""
-            val filename =
-                computeAssetFilename(index, assetKey, assetObjectHash)
+            val filename = computeAssetFilename(index, assetKey, assetObjectHash)
 
             val file = File(assets, filename)
             project.getCachedFile(file) {
@@ -40,8 +39,7 @@ object MinecraftAssetsProvider {
                     it.writeBytes(
                         URL(
                             RESOURCES_BASE + assetObjectHash.substring(
-                                0,
-                                2
+                                0, 2
                             ) + "/" + assetObjectHash
                         ).readBytes()
                     )
@@ -61,9 +59,7 @@ object MinecraftAssetsProvider {
     }
 
     private fun computeAssetFilename(
-        index: AssetIndex,
-        assetKey: String,
-        assetObjectHash: String
+        index: AssetIndex, assetKey: String, assetObjectHash: String
     ): String {
         return if (index.isMapToResources == true) {
             assetKey
@@ -72,11 +68,21 @@ object MinecraftAssetsProvider {
         }
     }
 
-    private fun provideAssetIndexFile(project: Project): File {
-        return project.getCachedFile("assetIndex.json") {
+    fun provideAssetIndexFile(project: Project): File {
+        return project.getCachedFile(
+            File(
+                provideAssetsFolder0(project), "indexes${File.separatorChar}${computeAssetIndexName(project)}.json"
+            )
+        ) {
             project.logger.lifecycle("$loggerPrefix - Downloading asset index for Minecraft ${project.lightCraftExtension.computeVersionName()}")
             it.writeBytes(URL(MinecraftProvider.provideGameVersionMeta(project).assetIndex.url).readBytes())
         }
+    }
+
+    fun computeAssetIndexName(project: Project): String? {
+        return MinecraftProvider.provideGameVersionMeta(project).assetIndex.fabricId(
+            project.lightCraftExtension.computeVersionName()
+        )
     }
 
     private fun provideAssetIndex(project: Project): AssetIndex {

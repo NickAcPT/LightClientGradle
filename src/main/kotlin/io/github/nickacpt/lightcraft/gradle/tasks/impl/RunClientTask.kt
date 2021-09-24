@@ -126,6 +126,12 @@ open class RunClientTask : JavaExec() {
         launchArguments += "--gameDir"
         launchArguments += "\"${workingDir.absolutePath}\""
 
+        // Provide our game assets index file
+        if (isOneDotSixOrHigher) {
+            launchArguments += "--assetsIndex"
+            launchArguments += "\"${MinecraftAssetsProvider.computeAssetIndexName(project)}\""
+        }
+
         // Provide our game assets directory
         launchArguments += "--assetsDir"
         launchArguments += "\"${MinecraftAssetsProvider.provideMinecraftAssets(project).absolutePath}\""
