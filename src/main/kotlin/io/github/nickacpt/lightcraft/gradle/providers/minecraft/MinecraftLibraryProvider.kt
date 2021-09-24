@@ -12,6 +12,7 @@ object MinecraftLibraryProvider {
     fun provideMinecraftLibraries(project: Project) {
 
         val blacklistedDependencies = listOf("launchwrapper", "asm-all")
+        val dependencyVersionOverrides = listOf("2.9.1-nightly-20130708-debug3" to "2.9.1")
         project.repositories.maven(LIBRARIES_BASE)
         project.repositories.maven(FABRICMC_LIBRARIES_BASE)
         project.repositories.maven(JITPACK_LIBRARIES_BASE)
@@ -20,11 +21,17 @@ object MinecraftLibraryProvider {
 
         for (library in versionInfo.libraries ?: emptyList()) {
             if (library.isValidForOS && !library.hasNatives() && library.artifact() != null) {
-                if (library.name != null && blacklistedDependencies.none { library.name.contains(it, true) })
+                if (library.name != null && blacklistedDependencies.none { library.name.contains(it, true) }) {
+                    var finalName = library.name
+                    dependencyVersionOverrides.forEach {
+                        finalName = finalName.replace(it.first, it.second)
+                    }
+
                     project.dependencies.add(
                         MINECRAFT_LIBRARY_CONFIGURATION,
-                        library.name
+                        finalName
                     )
+                }
             }
         }
 
