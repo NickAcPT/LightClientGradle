@@ -69,7 +69,7 @@ public record MinecraftVersionMeta(
                 }
             }
 
-            return rules.stream().anyMatch(it -> it.isAllowed() && it.os() == null);
+            return true;
         }
 
         public boolean hasNatives() {
