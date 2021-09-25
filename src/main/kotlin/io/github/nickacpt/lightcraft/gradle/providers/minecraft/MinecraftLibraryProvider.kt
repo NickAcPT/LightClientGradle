@@ -55,8 +55,10 @@ object MinecraftLibraryProvider {
             launchWrapperDependency
         ) as ExternalModuleDependency).apply {
             this.exclude(module = "lwjgl")
-            this.exclude(module = "log4j-core")
-            this.exclude(module = "log4j-api")
+            if (project.lightCraftExtension.clientVersion.shipsLog4J) {
+                this.exclude(module = "log4j-core")
+                this.exclude(module = "log4j-api")
+            }
         }
     }
 }
