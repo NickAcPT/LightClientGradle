@@ -41,11 +41,14 @@ const val MIXINS_DEBUG = "mixin.debug"
 private const val mixinsVersion = "0.9.2+mixin.0.8.2"
 private const val asmVersion = "9.1"
 private const val launchWrapperVersion = "21853d87de"
+private const val lwjgl2CompatVersion = "3.2.3-SNAPSHOT"
 
 const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
 const val asmDependency = "org.ow2.asm:asm:$asmVersion"
 const val asmTreeDependency = "org.ow2.asm:asm-tree:$asmVersion"
 const val asmUtilDependency = "org.ow2.asm:asm-util:$asmVersion"
 const val launchWrapperDependency = "com.github.NickAcPT:LegacyLauncher:$launchWrapperVersion"
+const val lwjgl2CompatDependency = "com.github.OrionCraftMC:lwjgl-compat-layer:$lwjgl2CompatVersion"
+
 
 val objectMapper by lazy { jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }

@@ -7,6 +7,8 @@ open class LightCraftGradleExtension {
 
     internal val launchSettings = LightCraftLaunchSettings()
 
+    internal val experimentalSettings = LightCraftExperimentalSettings()
+
     var clientVersion = ClientVersion.V1_5_2
 
     fun computeVersionName() =
@@ -31,6 +33,10 @@ open class LightCraftGradleExtension {
 
     fun launch(handler: LightCraftLaunchSettings.() -> Unit) {
         launchSettings.handler()
+    }
+
+    fun experimental(handler: LightCraftExperimentalSettings.() -> Unit) {
+        experimentalSettings.handler()
     }
 
 }

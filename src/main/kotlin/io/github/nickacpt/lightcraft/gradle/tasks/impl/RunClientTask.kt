@@ -83,6 +83,13 @@ open class RunClientTask : JavaExec() {
         // Tell Minecraft that we are launching under a development environment
         jvmLaunchArguments += LIGHTCRAFT_LAUNCH_DEV_ENV to "true"
 
+        if (extension.experimentalSettings.injectLwjgl2CompatibilityLayer) {
+            jvmLaunchArguments += "org.lwjgl.util.Debug" to "true"
+            jvmLaunchArguments += "org.lwjgl.opengl.disableStaticInit" to "true"
+
+            environment("POJAV_RENDERER", "opengles")
+        }
+
         if (extension.launchSettings.enableMixinsDebug) {
             // Tell Sponge Mixin that we want to enable all debug features
             jvmLaunchArguments += MIXINS_DEBUG to "true"
