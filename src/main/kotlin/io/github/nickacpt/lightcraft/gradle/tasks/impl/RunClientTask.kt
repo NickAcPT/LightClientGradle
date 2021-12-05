@@ -128,7 +128,7 @@ open class RunClientTask : JavaExec() {
 
         // Provide our game assets index file
         if (isOneDotSixOrHigher) {
-            launchArguments += "--assetsIndex"
+            launchArguments += "--assetIndex"
             launchArguments += "\"${MinecraftAssetsProvider.computeAssetIndexName(project)}\""
         }
 

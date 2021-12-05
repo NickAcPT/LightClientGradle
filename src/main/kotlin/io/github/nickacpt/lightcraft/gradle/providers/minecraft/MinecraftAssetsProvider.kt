@@ -90,10 +90,11 @@ object MinecraftAssetsProvider {
     }
 
     private fun provideAssetsFolder0(project: Project): File {
+        var folderName = "assets"
         if (project.lightCraftExtension.clientVersion.hasLegacyAssets) {
-            return File(project.projectDir, "run" + File.separatorChar + "resources").also { it.mkdirs() }
+            folderName = "resources"
         }
-        return project.getCachedFile("assets").also { it.mkdirs() }
+        return File(project.projectDir, "run" + File.separatorChar + folderName).also { it.mkdirs() }
     }
 
 }
