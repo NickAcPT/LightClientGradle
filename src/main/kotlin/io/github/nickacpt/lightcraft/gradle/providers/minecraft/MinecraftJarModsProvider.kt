@@ -2,8 +2,8 @@ package io.github.nickacpt.lightcraft.gradle.providers.minecraft
 
 import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
-import io.github.nickacpt.lightcraft.gradle.utils.exposeAccessToPublic
 import io.github.nickacpt.lightcraft.gradle.utils.mergeZip
+import io.github.nickacpt.lightcraft.gradle.utils.peformMiscAsmProcessing
 import io.github.nickacpt.lightcraft.gradle.utils.provideDependency
 import org.gradle.api.Project
 import java.io.File
@@ -61,7 +61,7 @@ object MinecraftJarModsProvider {
 
             removeSignature(finalMergedJar)
 
-            finalMergedJar.exposeAccessToPublic()
+            finalMergedJar.peformMiscAsmProcessing()
         }
     }
 

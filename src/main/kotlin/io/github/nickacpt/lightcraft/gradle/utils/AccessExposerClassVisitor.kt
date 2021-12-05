@@ -1,9 +1,12 @@
 package io.github.nickacpt.lightcraft.gradle.utils
 
 import io.github.nickacpt.lightcraft.gradle.ASM_VERSION
-import org.objectweb.asm.*
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 
-class AccessExposerClassVisitor(writer: ClassWriter) : ClassVisitor(ASM_VERSION, writer) {
+class AccessExposerClassVisitor(writer: ClassVisitor) : ClassVisitor(ASM_VERSION, writer) {
     override fun visit(
         version: Int,
         access: Int,

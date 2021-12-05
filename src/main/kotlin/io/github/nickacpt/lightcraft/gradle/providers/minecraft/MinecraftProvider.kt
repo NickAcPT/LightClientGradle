@@ -2,7 +2,7 @@ package io.github.nickacpt.lightcraft.gradle.providers.minecraft
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.nickacpt.lightcraft.gradle.*
-import io.github.nickacpt.lightcraft.gradle.utils.exposeAccessToPublic
+import io.github.nickacpt.lightcraft.gradle.utils.peformMiscAsmProcessing
 import net.fabricmc.loom.configuration.providers.minecraft.ManifestVersion
 import net.fabricmc.loom.configuration.providers.minecraft.MinecraftVersionMeta
 import org.gradle.api.Project
@@ -51,7 +51,7 @@ object MinecraftProvider {
             removeSignature(jarFile)
 
             // Go through each class and make sure that all the classes/fields/methods are publicly accessible
-            jarFile.exposeAccessToPublic()
+            jarFile.peformMiscAsmProcessing()
         }
     }
 }
