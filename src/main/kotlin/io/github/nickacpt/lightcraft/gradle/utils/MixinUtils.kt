@@ -9,7 +9,7 @@ import java.io.File
 
 fun Project.getMixinFiles(): List<File> {
     val sourceSets = extensions.getByType<JavaPluginExtension>().sourceSets
-    val mixinFiles = sourceSets["main"]?.resources?.srcDirs?.first()?.listFiles()
+    val mixinFiles = sourceSets["main"]?.resources?.srcDirs?.flatMap { it.listFiles().toList() }
         ?.filter { it.nameWithoutExtension.startsWith("mixins.") && it.name.endsWith(".json") }
     return mixinFiles ?: emptyList()
 }
