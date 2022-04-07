@@ -30,6 +30,7 @@ internal object LightCraftConfigurations {
         // These will get automatically ignored by ShadowJar
         project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)
             .extendsFrom(project.minecraftLibraryConfiguration)
+            .extendsFrom(project.upgradedMinecraftLibraryConfiguration)
 
         // Present LaunchWrapper as a runtime-only dependency
         // TODO: When adding ShadowJar support, exclude this from getting shaded
