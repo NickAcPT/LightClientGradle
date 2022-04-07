@@ -40,7 +40,7 @@ const val MIXINS_DEBUG = "mixin.debug"
 
 private const val mixinsVersion = "0.9.2+mixin.0.8.2"
 private const val asmVersion = "9.1"
-private const val launchWrapperVersion = "21853d87de"
+private const val launchWrapperVersion = "e2aab18749"
 
 const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
 const val asmDependency = "org.ow2.asm:asm:$asmVersion"
