@@ -17,8 +17,12 @@ const val MAPPING_DEST_NS = "named"
 const val LAUNCH_WRAPPER_CONFIGURATION = "launchWrapper"
 const val JAR_MOD_CONFIGURATION = "minecraftJarMod"
 const val MINECRAFT_LIBRARY_CONFIGURATION = "minecraftLibrary"
+const val UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION = "upgradedMinecraftLibrary"
 
 const val ASM_VERSION = Opcodes.ASM9
+
+const val LIGHTCRAFT_MINECRAFT_DEP_GROUP = "net.minecraft"
+const val LIGHTCRAFT_MINECRAFT_DEP_NAME = "minecraft"
 
 const val LIGHTCRAFT_TASK_GROUP = "lightcraft"
 

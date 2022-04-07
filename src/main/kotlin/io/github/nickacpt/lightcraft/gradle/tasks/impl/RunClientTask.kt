@@ -5,6 +5,7 @@ package io.github.nickacpt.lightcraft.gradle.tasks.impl
 import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.launchWrapperConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
+import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.upgradedMinecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftAssetsProvider
@@ -44,8 +45,11 @@ open class RunClientTask : JavaExec() {
         // Depend on LaunchWrapper
         jarsToDepend += project.launchWrapperConfiguration.resolve()
 
-        // Depend on the Minecraft libraries
+        // Depend on the original Minecraft libraries
         jarsToDepend += project.minecraftLibraryConfiguration.resolve()
+
+        // Depend on the upgraded Minecraft libraries
+        jarsToDepend += project.upgradedMinecraftLibraryConfiguration.resolve()
 
         // Depend on the project's dependencies
         jarsToDepend += project.resolveClasspathAsPath().map { it.toFile() }

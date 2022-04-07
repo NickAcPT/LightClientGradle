@@ -15,8 +15,8 @@ object MappedMinecraftProvider {
         val extension = project.lightCraftExtension
 
         return project.provideDependency(
-            "net.minecraft",
-            "minecraft",
+            LIGHTCRAFT_MINECRAFT_DEP_GROUP,
+            LIGHTCRAFT_MINECRAFT_DEP_NAME,
             extension.clientVersion.friendlyName,
             file = provideMappedMinecraftFile(project)
         )

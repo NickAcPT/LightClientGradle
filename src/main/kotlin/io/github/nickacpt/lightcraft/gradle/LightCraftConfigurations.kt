@@ -12,12 +12,16 @@ internal object LightCraftConfigurations {
     val Project.minecraftLibraryConfiguration: Configuration
         get() = configurations.getByName(MINECRAFT_LIBRARY_CONFIGURATION)
 
+    val Project.upgradedMinecraftLibraryConfiguration: Configuration
+        get() = configurations.getByName(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
+
     val Project.launchWrapperConfiguration: Configuration
         get() = configurations.getByName(LAUNCH_WRAPPER_CONFIGURATION)
 
     fun initConfigurations(project: Project) {
         project.configurations.create(JAR_MOD_CONFIGURATION)
         project.configurations.create(MINECRAFT_LIBRARY_CONFIGURATION)
+        project.configurations.create(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
         project.configurations.create(LAUNCH_WRAPPER_CONFIGURATION)
     }
 

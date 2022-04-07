@@ -44,7 +44,7 @@ object MinecraftLibraryProvider {
             "javax.annotation:javax.annotation-api:1.3.2"
         ).forEach {
             project.dependencies.add(
-                MINECRAFT_LIBRARY_CONFIGURATION,
+                UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION,
                 it
             )
         }
