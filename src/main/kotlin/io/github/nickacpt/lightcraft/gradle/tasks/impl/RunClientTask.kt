@@ -12,7 +12,9 @@ import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNatives
 import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
 import io.github.nickacpt.lightcraft.gradle.utils.resolveClasspathAsPath
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.JavaExec
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import java.io.File
 
 open class RunClientTask : JavaExec() {
@@ -94,6 +96,32 @@ open class RunClientTask : JavaExec() {
 
         // Finally, set up our task to use these arguments
         jvmArgs = jvmLaunchArguments.map { "-D${it.first}=${it.second}" } + spongeMixinJavaAgent
+
+        // Workaround old versions requiring classes that are not exported by default
+        val isTaskToolchain9Plus =
+            (this.javaLauncher.orNull?.metadata?.languageVersion
+                ?: project.extensions.getByType(JavaPluginExtension::class.java).toolchain.languageVersion.orNull)?.canCompileOrRun(
+                JavaLanguageVersion.of(9)
+            )
+        val isGradleVersion9Plus = javaVersion.isJava9Compatible
+        val isJava9OrPlus = isTaskToolchain9Plus ?: isGradleVersion9Plus
+
+        if (isJava9OrPlus) {
+            jvmArgs = jvmArgs!! + listOf(
+                // Add DNS module
+                "--add-modules",
+                "jdk.naming.dns",
+
+
+                // Export DNS modules
+                "--add-exports",
+                "jdk.naming.dns/com.sun.jndi.dns=java.naming",
+
+                // Open all classes just to be sure
+                "--add-opens",
+                "java.base/java.io=ALL-UNNAMED"
+            )
+        }
     }
 
     private fun getSpongeMixinJar(): File {
