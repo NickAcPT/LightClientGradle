@@ -15,14 +15,14 @@ internal object LightCraftConfigurations {
     val Project.upgradedMinecraftLibraryConfiguration: Configuration
         get() = configurations.getByName(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
 
-    val Project.launchWrapperConfiguration: Configuration
-        get() = configurations.getByName(LAUNCH_WRAPPER_CONFIGURATION)
+    val Project.orionLauncherConfiguration: Configuration
+        get() = configurations.getByName(ORION_LAUNCHER_CONFIGURATION)
 
     fun initConfigurations(project: Project) {
         project.configurations.create(JAR_MOD_CONFIGURATION)
         project.configurations.create(MINECRAFT_LIBRARY_CONFIGURATION)
         project.configurations.create(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
-        project.configurations.create(LAUNCH_WRAPPER_CONFIGURATION)
+        project.configurations.create(ORION_LAUNCHER_CONFIGURATION)
     }
 
     fun setupConfigurationDeps(project: Project) {
@@ -31,11 +31,7 @@ internal object LightCraftConfigurations {
         project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)
             .extendsFrom(project.minecraftLibraryConfiguration)
             .extendsFrom(project.upgradedMinecraftLibraryConfiguration)
-
-        // Present LaunchWrapper as a runtime-only dependency
-        // TODO: When adding ShadowJar support, exclude this from getting shaded
-        project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
-            .extendsFrom(project.launchWrapperConfiguration)
+            .extendsFrom(project.orionLauncherConfiguration)
     }
 
 }

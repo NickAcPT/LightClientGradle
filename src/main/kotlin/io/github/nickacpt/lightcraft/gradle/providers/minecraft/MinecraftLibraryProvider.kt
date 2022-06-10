@@ -3,8 +3,6 @@ package io.github.nickacpt.lightcraft.gradle.providers.minecraft
 import io.github.nickacpt.lightcraft.gradle.*
 import net.fabricmc.loom.configuration.providers.minecraft.MinecraftVersionMeta
 import org.gradle.api.Project
-import org.gradle.api.artifacts.ExternalModuleDependency
-import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.maven
 
 object MinecraftLibraryProvider {
@@ -15,7 +13,6 @@ object MinecraftLibraryProvider {
         val dependencyVersionOverrides = listOf("2.9.1-nightly-20130708-debug3" to "2.9.1")
         project.repositories.maven(LIBRARIES_BASE)
         project.repositories.maven(FABRICMC_LIBRARIES_BASE)
-        project.repositories.maven(JITPACK_LIBRARIES_BASE)
 
         val versionInfo: MinecraftVersionMeta = MinecraftProvider.provideGameVersionMeta(project)
 
@@ -26,6 +23,8 @@ object MinecraftLibraryProvider {
                     dependencyVersionOverrides.forEach {
                         finalName = finalName.replace(it.first, it.second)
                     }
+
+                    if (finalName.contains("lwjgl") && !project.lightCraftExtension.provideOriginalLwjgl) continue
 
                     project.dependencies.add(
                         MINECRAFT_LIBRARY_CONFIGURATION,
@@ -49,16 +48,10 @@ object MinecraftLibraryProvider {
             )
         }
 
-        // Add LightCraft LaunchWrapper
-        (project.dependencies.add(
-            LAUNCH_WRAPPER_CONFIGURATION,
-            launchWrapperDependency
-        ) as ExternalModuleDependency).apply {
-            this.exclude(module = "lwjgl")
-            if (project.lightCraftExtension.clientVersion.shipsLog4J) {
-                this.exclude(module = "log4j-core")
-                this.exclude(module = "log4j-api")
-            }
-        }
+        // Add OrionCraft's Orion Launcher
+        project.dependencies.add(
+            ORION_LAUNCHER_CONFIGURATION,
+            orionLauncherDependency
+        )
     }
 }

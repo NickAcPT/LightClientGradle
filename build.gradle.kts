@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.nickacpt.lightclient"
-version = "1.3.6-SNAPSHOT"
+version = "2.0.0-SNAPSHOT"
 
 repositories {
     mavenLocal()

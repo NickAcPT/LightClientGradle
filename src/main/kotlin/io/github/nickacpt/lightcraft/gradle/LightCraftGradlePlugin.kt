@@ -28,6 +28,7 @@ class LightCraftGradlePlugin : Plugin<Project> {
             if (extension.provideOptifineJarMod) {
                 MinecraftJarModsProvider.provideOptifineJarMod(project)
             }
+            
             // Provide mapped Minecraft jar
             MappedMinecraftProvider.provideMappedMinecraftDependency(project)
 

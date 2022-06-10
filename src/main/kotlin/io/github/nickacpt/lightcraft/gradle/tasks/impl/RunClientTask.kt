@@ -3,14 +3,15 @@
 package io.github.nickacpt.lightcraft.gradle.tasks.impl
 
 import io.github.nickacpt.lightcraft.gradle.*
-import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.launchWrapperConfiguration
+import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.orionLauncherConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.upgradedMinecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
+import io.github.nickacpt.lightcraft.gradle.providers.mappings.MinecraftMappingsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MappedMinecraftProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftAssetsProvider
 import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftNativesProvider
-import io.github.nickacpt.lightcraft.gradle.utils.getMixinFiles
+import io.github.nickacpt.lightcraft.gradle.providers.minecraft.MinecraftProvider
 import io.github.nickacpt.lightcraft.gradle.utils.resolveClasspathAsPath
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
@@ -24,16 +25,18 @@ open class RunClientTask : JavaExec() {
         group = LIGHTCRAFT_TASK_GROUP
 
         val extension = project.lightCraftExtension
-        setupClasspath()
+        setupClasspath(extension)
         setupWorkingDirectory()
         setupMainClassAndArguments(extension)
     }
 
-    private fun setupClasspath() {
+    private fun setupClasspath(extension: LightCraftGradleExtension) {
         val jarsToDepend = mutableListOf<File>()
 
         // Depend on the Minecraft jar that is our dependency
-        jarsToDepend += MappedMinecraftProvider.provideMappedMinecraftDependency(project)
+        jarsToDepend += if (extension.launchSettings.launchObfuscatedInDev)
+            MinecraftProvider.provideMinecraftFile(project)
+        else MappedMinecraftProvider.provideMappedMinecraftDependency(project)
 
         // Setup Task to depend on the jar task
         val jarTask = project.tasks.getByName(JavaPlugin.JAR_TASK_NAME)
@@ -43,7 +46,7 @@ open class RunClientTask : JavaExec() {
         jarsToDepend += jarTask.outputs.files.files
 
         // Depend on LaunchWrapper
-        jarsToDepend += project.launchWrapperConfiguration.resolve()
+        jarsToDepend += project.orionLauncherConfiguration.resolve()
 
         // Depend on the original Minecraft libraries
         jarsToDepend += project.minecraftLibraryConfiguration.resolve()
@@ -64,7 +67,7 @@ open class RunClientTask : JavaExec() {
 
     private fun setupMainClassAndArguments(extension: LightCraftGradleExtension) {
         // Launch with LaunchWrapper
-        mainClass.set("net.minecraft.launchwrapper.Launch")
+        mainClass.set("io.github.orioncraftmc.launcher.Entrypoint")
 
         setupJvmLaunchArguments(extension)
 
@@ -74,17 +77,8 @@ open class RunClientTask : JavaExec() {
     private fun setupJvmLaunchArguments(extension: LightCraftGradleExtension) {
         val jvmLaunchArguments = mutableListOf<Pair<String, String>>()
 
-        // Tell LaunchWrapper that we are launching Mixins on the client side
-        jvmLaunchArguments += LAUNCHWRAPPER_MIXIN_SIDE_PROP to MIXIN_SIDE_CLIENT
-
         // Provide Minecraft with lwjgl natives
         jvmLaunchArguments += JVM_LIBRARY_PATH_PROP to "\"${MinecraftNativesProvider.provideNativesFolder(project)}\""
-
-        // Tell LaunchWrapper what Minecraft class we are launching
-        jvmLaunchArguments += LAUNCHWRAPPER_MAIN_CLASS_PROP to extension.clientVersion.mainClass
-
-        // Tell LaunchWrapper what the Minecraft class is
-        jvmLaunchArguments += LAUNCHWRAPPER_GAME_CLASS_PROP to extension.clientVersion.gameClass
 
         // Tell Minecraft that we are launching under a development environment
         jvmLaunchArguments += LIGHTCRAFT_LAUNCH_DEV_ENV to "true"
@@ -107,6 +101,7 @@ open class RunClientTask : JavaExec() {
                 ?: project.extensions.getByType(JavaPluginExtension::class.java).toolchain.languageVersion.orNull)?.canCompileOrRun(
                 JavaLanguageVersion.of(9)
             )
+
         val isGradleVersion9Plus = javaVersion.isJava9Compatible
         val isJava9OrPlus = isTaskToolchain9Plus ?: isGradleVersion9Plus
 
@@ -141,6 +136,27 @@ open class RunClientTask : JavaExec() {
         // Set up game launch arguments
         val launchArguments = mutableListOf<String>()
 
+        // Tell orion-launcher that we are launching Mixins on the client side
+        launchArguments += "--side"
+        launchArguments += MIXIN_SIDE_CLIENT
+
+        // Tell orion-launcher what class it is supposed to launch
+        launchArguments += "--main-class"
+        launchArguments += extension.clientVersion.mainClass
+
+        launchArguments += "--excluded-packages"
+        launchArguments += "\"org.w3c.\""
+
+
+        // Tell orion-launcher our mappings file
+        if (extension.launchSettings.launchObfuscatedInDev) {
+            launchArguments += "--mappings"
+            launchArguments += MinecraftMappingsProvider.provideMappings(project).absolutePath
+        }
+
+        // Tell orion-launcher that we are passing-through the Minecraft arguments
+        launchArguments += "--"
+
         // Provide Minecraft with version/profile information if needed
         if (isOneDotSixOrHigher) {
             launchArguments += "--version"
@@ -167,20 +183,6 @@ open class RunClientTask : JavaExec() {
         // Provide our game assets directory
         launchArguments += "--assetsDir"
         launchArguments += "\"${MinecraftAssetsProvider.provideMinecraftAssets(project).absolutePath}\""
-
-        // Provide Vanilla LaunchWrapper tweaker
-        launchArguments += "--tweakClass"
-        launchArguments += "net.minecraft.launchwrapper.VanillaTweaker"
-
-        // Provide our custom Mixin LaunchWrapper tweaker
-        launchArguments += "--tweakClass"
-        launchArguments += "org.spongepowered.asm.launch.LightCraftMixinTweaker"
-
-        // Provide Mixin files to LaunchWrapper
-        project.getMixinFiles().forEach { mixinFile ->
-            launchArguments += "--mixin"
-            launchArguments += mixinFile.name
-        }
 
         // Add 1.7.10 (and higher) arguments
         if (isOneDotSixOrHigher) {

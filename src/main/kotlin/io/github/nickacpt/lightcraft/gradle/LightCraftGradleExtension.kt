@@ -29,6 +29,8 @@ open class LightCraftGradleExtension {
 
     var provideOptifineJarMod: Boolean = false
 
+    var provideOriginalLwjgl: Boolean = true
+
     fun launch(handler: LightCraftLaunchSettings.() -> Unit) {
         launchSettings.handler()
     }
