@@ -39,7 +39,7 @@ const val MIXINS_DEBUG = "mixin.debug"
 
 private const val mixinsVersion = "0.0.1+mixin.0.8.5"
 private const val asmVersion = "9.3"
-private const val launchWrapperVersion = "0.0.2-SNAPSHOT"
+private const val launchWrapperVersion = "0.0.3-SNAPSHOT"
 
 const val mixinDependency = "io.github.orioncraftmc:sponge-mixin:$mixinsVersion"
 const val asmDependency = "org.ow2.asm:asm:$asmVersion"
