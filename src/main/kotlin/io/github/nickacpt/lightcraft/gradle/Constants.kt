@@ -39,12 +39,12 @@ const val MIXINS_DEBUG = "mixin.debug"
 
 private const val mixinsVersion = "0.0.1+mixin.0.8.5"
 private const val asmVersion = "9.3"
-private const val launchWrapperVersion = "0.0.3-SNAPSHOT"
+private const val orionLauncherVersion = "0.0.5-SNAPSHOT"
 
 const val mixinDependency = "io.github.orioncraftmc:sponge-mixin:$mixinsVersion"
 const val asmDependency = "org.ow2.asm:asm:$asmVersion"
 const val asmTreeDependency = "org.ow2.asm:asm-tree:$asmVersion"
 const val asmUtilDependency = "org.ow2.asm:asm-util:$asmVersion"
-const val orionLauncherDependency = "io.github.orioncraftmc:orion-launcher:$launchWrapperVersion"
+const val orionLauncherDependency = "io.github.orioncraftmc:orion-launcher:$orionLauncherVersion"
 
 val objectMapper by lazy { jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }
