@@ -21,26 +21,26 @@ dependencies {
     implementation(gradleKotlinDsl())
 
     /* Mapping I/O */
-    implementation("com.github.FabricMc:mapping-io:5879155d42")
+    implementation("com.github.FabricMc:mapping-io:597f0722d6")
 
     /* JSON I/O */
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.4")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
     /* Jar Remapping */
     implementation("org.quiltmc:tiny-remapper:0.4.3")
 
     /* Zip I/O */
-    implementation("org.zeroturnaround:zt-zip:1.14")
+    implementation("org.zeroturnaround:zt-zip:1.15")
 
     /* Decompiler */
-    implementation("org.quiltmc:quiltflower:1.5.0")
+    implementation("org.quiltmc:quiltflower:1.8.0")
 
     /* ASM */
-    implementation("org.ow2.asm:asm:9.2")
-    implementation("org.ow2.asm:asm-analysis:9.2")
-    implementation("org.ow2.asm:asm-commons:9.2")
-    implementation("org.ow2.asm:asm-tree:9.2")
-    implementation("org.ow2.asm:asm-util:9.2")
+    implementation("org.ow2.asm:asm:9.3")
+    implementation("org.ow2.asm:asm-analysis:9.3")
+    implementation("org.ow2.asm:asm-commons:9.3")
+    implementation("org.ow2.asm:asm-tree:9.3")
+    implementation("org.ow2.asm:asm-util:9.3")
 
     /* Remapping helper - Decompilation */
     implementation("org.quiltmc:stitch:0.6.2") {
