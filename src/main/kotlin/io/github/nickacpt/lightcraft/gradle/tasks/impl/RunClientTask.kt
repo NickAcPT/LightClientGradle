@@ -144,8 +144,10 @@ open class RunClientTask : JavaExec() {
         launchArguments += "--main-class"
         launchArguments += extension.clientVersion.mainClass
 
-        launchArguments += "--excluded-packages"
-        launchArguments += "\"org.w3c.\""
+        excludedPackages.forEach { pkg ->
+            launchArguments += "--excluded-packages"
+            launchArguments += "\"$pkg\""
+        }
 
 
         // Tell orion-launcher our mappings file
