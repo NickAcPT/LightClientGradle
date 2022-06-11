@@ -6,10 +6,9 @@ plugins {
 }
 
 group = "io.github.nickacpt.lightclient"
-version = "2.0.6-SNAPSHOT"
+version = "2.0.7-SNAPSHOT"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven("https://jitpack.io/")
     maven("https://maven.quiltmc.org/repository/release/")
