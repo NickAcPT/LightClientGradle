@@ -126,8 +126,7 @@ open class RunClientTask : JavaExec() {
     private fun getSpongeMixinJar(): File {
         val mixinsJarConfig = project.configurations.detachedConfiguration()
         mixinsJarConfig.dependencies.add(project.dependencies.create(mixinDependency))
-        val mixinsJar = mixinsJarConfig.resolve().first()
-        return mixinsJar
+        return mixinsJarConfig.resolve().first()
     }
 
     private fun setupGameLaunchArguments(extension: LightCraftGradleExtension) {

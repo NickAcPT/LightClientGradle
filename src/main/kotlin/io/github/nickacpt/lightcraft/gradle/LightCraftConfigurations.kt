@@ -12,6 +12,9 @@ internal object LightCraftConfigurations {
     val Project.minecraftLibraryConfiguration: Configuration
         get() = configurations.getByName(MINECRAFT_LIBRARY_CONFIGURATION)
 
+    val Project.minecraftRemappedConfiguration: Configuration
+        get() = configurations.getByName(MINECRAFT_REMAPPED_CONFIGURATION)
+
     val Project.upgradedMinecraftLibraryConfiguration: Configuration
         get() = configurations.getByName(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
 
@@ -20,17 +23,22 @@ internal object LightCraftConfigurations {
 
     fun initConfigurations(project: Project) {
         project.configurations.create(JAR_MOD_CONFIGURATION)
+        project.configurations.create(MINECRAFT_REMAPPED_CONFIGURATION)
         project.configurations.create(MINECRAFT_LIBRARY_CONFIGURATION)
         project.configurations.create(UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION)
         project.configurations.create(ORION_LAUNCHER_CONFIGURATION)
     }
 
     fun setupConfigurationDeps(project: Project) {
-        // Present Minecraft libraries as compile-time dependencies
-        // These will get automatically ignored by ShadowJar
         project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)
+            .extendsFrom(project.minecraftRemappedConfiguration)
+
+        project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
             .extendsFrom(project.minecraftLibraryConfiguration)
             .extendsFrom(project.upgradedMinecraftLibraryConfiguration)
+            .extendsFrom(project.jarModConfiguration)
+
+        project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
             .extendsFrom(project.orionLauncherConfiguration)
     }
 

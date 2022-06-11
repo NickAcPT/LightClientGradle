@@ -7,13 +7,13 @@ import net.fabricmc.tinyremapper.NonClassCopyMode
 import net.fabricmc.tinyremapper.OutputConsumerPath
 import net.fabricmc.tinyremapper.TinyRemapper
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
 
 fun Project.resolveClasspathAsPath(): List<Path> {
-    return project.configurations.filter { it.isCanBeResolved }
-        .flatMap { conf -> conf.resolve().map { it.toPath() } }
+    return configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME).resolve().map { it.toPath() }
 }
 
 

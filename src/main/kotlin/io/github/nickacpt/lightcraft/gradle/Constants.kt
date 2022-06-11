@@ -17,6 +17,7 @@ const val MAPPING_DEST_NS = "named"
 const val ORION_LAUNCHER_CONFIGURATION = "orionLauncher"
 const val JAR_MOD_CONFIGURATION = "minecraftJarMod"
 const val MINECRAFT_LIBRARY_CONFIGURATION = "minecraftLibrary"
+const val MINECRAFT_REMAPPED_CONFIGURATION = "minecraftRemapped"
 const val UPGRADED_MINECRAFT_LIBRARY_CONFIGURATION = "upgradedMinecraftLibrary"
 
 const val ASM_VERSION = Opcodes.ASM9
@@ -38,11 +39,11 @@ const val LIGHTCRAFT_LAUNCH_DEV_ENV = "lightcraft.launch.dev"
 
 const val MIXINS_DEBUG = "mixin.debug"
 
-private const val mixinsVersion = "0.0.1+mixin.0.8.5"
+private const val mixinsVersion = "0.11.4+mixin.0.8.5"
 private const val asmVersion = "9.3"
-private const val orionLauncherVersion = "0.0.6-SNAPSHOT"
+private const val orionLauncherVersion = "0.0.7-SNAPSHOT"
 
-const val mixinDependency = "io.github.orioncraftmc:sponge-mixin:$mixinsVersion"
+const val mixinDependency = "net.fabricmc:sponge-mixin:$mixinsVersion"
 const val asmDependency = "org.ow2.asm:asm:$asmVersion"
 const val asmTreeDependency = "org.ow2.asm:asm-tree:$asmVersion"
 const val asmUtilDependency = "org.ow2.asm:asm-util:$asmVersion"
