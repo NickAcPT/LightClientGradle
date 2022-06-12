@@ -13,6 +13,7 @@ object MinecraftLibraryProvider {
         val dependencyVersionOverrides = listOf("2.9.1-nightly-20130708-debug3" to "2.9.1")
         project.repositories.maven(LIBRARIES_BASE)
         project.repositories.maven(FABRICMC_LIBRARIES_BASE)
+        project.repositories.maven(JITPACK_BASE)
 
         val versionInfo: MinecraftVersionMeta = MinecraftProvider.provideGameVersionMeta(project)
 
