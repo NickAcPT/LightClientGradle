@@ -4,8 +4,8 @@ package io.github.nickacpt.lightcraft.gradle.tasks.impl
 
 import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.jarModConfiguration
-import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.orionLauncherConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
+import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.orionLauncherConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.upgradedMinecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
 import io.github.nickacpt.lightcraft.gradle.providers.mappings.MinecraftMappingsProvider
@@ -115,7 +115,6 @@ open class RunClientTask : JavaExec() {
                 "--add-modules",
                 "jdk.naming.dns",
 
-
                 // Export DNS modules
                 "--add-exports",
                 "jdk.naming.dns/com.sun.jndi.dns=java.naming",
@@ -151,7 +150,6 @@ open class RunClientTask : JavaExec() {
             launchArguments += "--excluded-packages"
             launchArguments += "\"$pkg\""
         }
-
 
         // Tell orion-launcher our mappings file
         if (extension.launchSettings.deobfuscateInDev) {
