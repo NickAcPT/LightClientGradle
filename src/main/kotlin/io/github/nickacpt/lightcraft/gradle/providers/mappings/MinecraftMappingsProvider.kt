@@ -5,6 +5,7 @@ import io.github.nickacpt.lightcraft.gradle.getCachedFile
 import io.github.nickacpt.lightcraft.gradle.lightCraftExtension
 import io.github.nickacpt.lightcraft.gradle.loggerPrefix
 import io.github.nickacpt.lightcraft.gradle.minecraft.ClientVersion
+import io.github.nickacpt.lightcraft.gradle.utils.ExceptionCatchingMappingVisitor
 import net.fabricmc.mappingio.MappingReader
 import net.fabricmc.mappingio.MappingWriter
 import net.fabricmc.mappingio.adapter.MappingNsRenamer
@@ -99,7 +100,7 @@ object MinecraftMappingsProvider {
     private fun mergeMappings(inputMappings: List<File>, outputFile: File) {
         val finalTree = MemoryMappingTree()
         inputMappings.forEach {
-            MappingReader.read(it.toPath(), finalTree)
+            MappingReader.read(it.toPath(), ExceptionCatchingMappingVisitor(finalTree))
         }
 
         outputFile.delete()
