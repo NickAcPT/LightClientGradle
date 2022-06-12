@@ -47,11 +47,13 @@ object MinecraftProvider {
                 ).readBytes()
             )
 
-            // Remove the pesky META-INF signature file
-            removeSignature(jarFile)
+            if (!project.lightCraftExtension.launchSettings.deobfuscateInDev) {
+                // Remove the pesky META-INF signature file
+                removeSignature(jarFile)
 
-            // Go through each class and make sure that all the classes/fields/methods are publicly accessible
-            jarFile.peformMiscAsmProcessing()
+                // Go through each class and make sure that all the classes/fields/methods are publicly accessible
+                jarFile.peformMiscAsmProcessing()
+            }
         }
     }
 }

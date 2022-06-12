@@ -36,7 +36,6 @@ internal object LightCraftConfigurations {
         project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
             .extendsFrom(project.minecraftLibraryConfiguration)
             .extendsFrom(project.upgradedMinecraftLibraryConfiguration)
-            .extendsFrom(project.jarModConfiguration)
 
         project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
             .extendsFrom(project.orionLauncherConfiguration)

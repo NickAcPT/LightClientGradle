@@ -5,5 +5,7 @@ open class LightCraftLaunchSettings {
 
     var enableMixinsDebug = false
 
-    var launchObfuscatedInDev = false
+    var deobfuscateInDev = false
+
+    var transformExcludedPackages = mutableListOf<String>()
 }

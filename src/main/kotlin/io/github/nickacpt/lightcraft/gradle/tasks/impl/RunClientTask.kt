@@ -3,6 +3,7 @@
 package io.github.nickacpt.lightcraft.gradle.tasks.impl
 
 import io.github.nickacpt.lightcraft.gradle.*
+import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.jarModConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.orionLauncherConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.minecraftLibraryConfiguration
 import io.github.nickacpt.lightcraft.gradle.LightCraftConfigurations.upgradedMinecraftLibraryConfiguration
@@ -33,8 +34,11 @@ open class RunClientTask : JavaExec() {
     private fun setupClasspath(extension: LightCraftGradleExtension) {
         val jarsToDepend = mutableListOf<File>()
 
+        // Depend on the Minecraft jar mods first
+        jarsToDepend += project.jarModConfiguration.resolve()
+
         // Depend on the Minecraft jar that is our dependency
-        jarsToDepend += if (extension.launchSettings.launchObfuscatedInDev)
+        jarsToDepend += if (extension.launchSettings.deobfuscateInDev)
             MinecraftProvider.provideMinecraftFile(project)
         else MappedMinecraftProvider.provideMappedMinecraftDependency(project)
 
@@ -143,14 +147,14 @@ open class RunClientTask : JavaExec() {
         launchArguments += "--main-class"
         launchArguments += extension.clientVersion.mainClass
 
-        excludedPackages.forEach { pkg ->
+        (excludedPackages + extension.launchSettings.transformExcludedPackages).forEach { pkg ->
             launchArguments += "--excluded-packages"
             launchArguments += "\"$pkg\""
         }
 
 
         // Tell orion-launcher our mappings file
-        if (extension.launchSettings.launchObfuscatedInDev) {
+        if (extension.launchSettings.deobfuscateInDev) {
             launchArguments += "--mappings"
             launchArguments += MinecraftMappingsProvider.provideMappings(project).absolutePath
         }
