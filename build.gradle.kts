@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.nickacpt.lightclient"
- version = "2.1.1-SNAPSHOT"
+ version = "2.1.2-SNAPSHOT"
 
 repositories {
     mavenCentral()

@@ -34,8 +34,11 @@ open class RunClientTask : JavaExec() {
     private fun setupClasspath(extension: LightCraftGradleExtension) {
         val jarsToDepend = mutableListOf<File>()
 
-        // Depend on the Minecraft jar mods first
-        jarsToDepend += project.jarModConfiguration.resolve()
+        // Depend on the Minecraft jar mods first if we are required to run obfuscated in dev
+        // By default LightClient merges the jar mods with the Minecraft jar
+        if (extension.launchSettings.deobfuscateInDev) {
+            jarsToDepend += project.jarModConfiguration.resolve()
+        }
 
         // Depend on the Minecraft jar that is our dependency
         jarsToDepend += if (extension.launchSettings.deobfuscateInDev)
