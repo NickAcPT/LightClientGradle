@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.objectweb.asm.Opcodes
 
 
+const val ORIONMAVEN_BASE = "https://raw.githubusercontent.com/OrionCraftMC/OrionMaven/main/"
 const val JITPACK_BASE = "https://jitpack.io/"
 const val FABRICMC_LIBRARIES_BASE = "https://maven.fabricmc.net/"
 const val LIBRARIES_BASE = "https://libraries.minecraft.net/"
