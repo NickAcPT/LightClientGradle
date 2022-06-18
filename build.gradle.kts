@@ -11,6 +11,7 @@ group = "io.github.nickacpt.lightclient"
 repositories {
     mavenCentral()
     maven("https://jitpack.io/")
+    maven("https://maven.fabricmc.net/")
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://raw.githubusercontent.com/OrionCraftMC/OrionMaven/main/")
 }
@@ -26,7 +27,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
     /* Jar Remapping */
-    implementation("org.quiltmc:tiny-remapper:0.4.3")
+    implementation("net.fabricmc:tiny-remapper:0.8.5")
 
     /* Zip I/O */
     implementation("org.zeroturnaround:zt-zip:1.15")
