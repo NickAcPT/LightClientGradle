@@ -56,11 +56,19 @@ gradlePlugin {
     }
 }
 
+val targetJavaVersion = 16
+
 tasks {
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
+        }
+    }
+
     compileKotlin {
-        kotlinOptions.jvmTarget = "16"
-        sourceCompatibility = "16"
-        targetCompatibility = "16"
+        kotlinOptions.jvmTarget = targetJavaVersion.toString()
+        sourceCompatibility = targetJavaVersion.toString()
+        targetCompatibility = targetJavaVersion.toString()
     }
 }
 
