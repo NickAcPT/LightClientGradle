@@ -3,6 +3,7 @@ package io.github.nickacpt.lightcraft.gradle.providers.minecraft
 import io.github.nickacpt.lightcraft.gradle.*
 import io.github.nickacpt.lightcraft.gradle.providers.mappings.MinecraftMappingsProvider
 import io.github.nickacpt.lightcraft.gradle.utils.RemapMappingFile
+import io.github.nickacpt.lightcraft.gradle.utils.peformMiscAsmProcessing
 import io.github.nickacpt.lightcraft.gradle.utils.provideDependency
 import io.github.nickacpt.lightcraft.gradle.utils.remapJar
 import org.gradle.api.Project
@@ -10,7 +11,6 @@ import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 
 object MappedMinecraftProvider {
-    @OptIn(ExperimentalPathApi::class)
     fun provideMappedMinecraftDependency(project: Project): File {
         val extension = project.lightCraftExtension
 
@@ -36,6 +36,8 @@ object MappedMinecraftProvider {
                 mappedMinecraftJar,
                 RemapMappingFile(finalMappingsFile, MAPPING_SOURCE_NS, MAPPING_DEST_NS)
             )
+
+            mappedMinecraftJar.peformMiscAsmProcessing(project.lightCraftExtension.clientVersion, fixParameters = true)
         }
     }
 }

@@ -52,7 +52,7 @@ object MinecraftProvider {
                 removeSignature(jarFile)
 
                 // Go through each class and make sure that all the classes/fields/methods are publicly accessible
-                jarFile.peformMiscAsmProcessing()
+                jarFile.peformMiscAsmProcessing(project.lightCraftExtension.clientVersion)
             }
         }
     }

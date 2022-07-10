@@ -61,7 +61,7 @@ object MinecraftJarModsProvider {
 
             removeSignature(finalMergedJar)
 
-            finalMergedJar.peformMiscAsmProcessing()
+            finalMergedJar.peformMiscAsmProcessing(project.lightCraftExtension.clientVersion)
         }
     }
 

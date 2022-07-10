@@ -46,6 +46,13 @@ dependencies {
     implementation("org.quiltmc:stitch:0.6.2") {
         exclude(module = "enigma")
     }
+
+    /* Remapping helper - Misc fixes */
+    implementation("com.github.MCPHackers:RetroDebugInjector:d5eedc0d3f") {
+        exclude(module = "mapping-io")
+        exclude(module = "asm")
+        exclude(module = "asm-tree")
+    }
 }
 
 gradlePlugin {

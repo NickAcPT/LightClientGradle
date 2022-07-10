@@ -7,10 +7,24 @@ enum class ClientVersion(
     val hasLegacyAssets: Boolean = false,
     val hasExtraMappings: Boolean = false,
     val hasMojangMappings: Boolean = false,
-    val shipsLog4J: Boolean = true
+    val shipsLog4J: Boolean = true,
+    val requiresRetroDebug: Boolean = false,
 ) {
-    V1_5_2("1.5.2", "net.minecraft.client.Minecraft", hasLegacyAssets = true, hasExtraMappings = true, shipsLog4J = false),
-    V1_6_4("1.6.4", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft", shipsLog4J = false),
+    V1_5_2(
+        "1.5.2",
+        "net.minecraft.client.Minecraft",
+        hasLegacyAssets = true,
+        hasExtraMappings = true,
+        shipsLog4J = false,
+        requiresRetroDebug = true
+    ),
+    V1_6_4(
+        "1.6.4",
+        "net.minecraft.client.main.Main",
+        "net.minecraft.client.Minecraft",
+        shipsLog4J = false,
+        requiresRetroDebug = true
+    ),
     V1_7_10("1.7.10", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
     V1_8_9("1.8.9", "net.minecraft.client.main.Main", "net.minecraft.client.Minecraft"),
 

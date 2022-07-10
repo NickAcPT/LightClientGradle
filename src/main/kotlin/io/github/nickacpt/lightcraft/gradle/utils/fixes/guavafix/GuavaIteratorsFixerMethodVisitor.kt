@@ -4,7 +4,7 @@ import io.github.nickacpt.lightcraft.gradle.ASM_VERSION
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-class GuavaIteratorsFixerMethodVisitor(previousVisitor: MethodVisitor) : MethodVisitor(ASM_VERSION, previousVisitor) {
+class GuavaIteratorsFixerMethodVisitor(previousVisitor: MethodVisitor?) : MethodVisitor(ASM_VERSION, previousVisitor) {
     override fun visitMethodInsn(
         opcode: Int,
         owner: String?,
